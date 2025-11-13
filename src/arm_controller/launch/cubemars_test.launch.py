@@ -9,7 +9,7 @@
 
 #     # Path to the ros2_control xacro file
 #     robot_description_file = PathJoinSubstitution(
-#         [FindPackageShare("arm_bringup"), "config", "cubemars_test.ros2_control.urdf.xacro"]
+#         [FindPackageShare("arm_controller"), "config", "cubemars_test.ros2_control.urdf.xacro"]
 #     )
 
 #     # Run xacro to generate robot_description parameter
@@ -21,7 +21,7 @@
 
 #     # Controllers YAML
 #     controller_config = PathJoinSubstitution(
-#         [FindPackageShare("arm_bringup"), "config", "controllers.yaml"]
+#         [FindPackageShare("arm_controller"), "config", "controllers.yaml"]
 #     )
 
 #     # Robot State Publisher (standard even if we don't use TF yet)
@@ -73,7 +73,7 @@ def generate_launch_description():
 
     # Path to the ros2_control xacro file
     robot_description_file = PathJoinSubstitution(
-        [FindPackageShare("arm_bringup"), "urdf", "cubemars_test.ros2_control.urdf.xacro"]
+        [FindPackageShare("arm_controller"), "urdf", "cubemars_test.ros2_control.urdf.xacro"]
     )
 
     # Run xacro to generate robot_description parameter
@@ -85,7 +85,7 @@ def generate_launch_description():
 
     # Controllers YAML
     controller_config = PathJoinSubstitution(
-        [FindPackageShare("arm_bringup"), "config", "controllers.yaml"]
+        [FindPackageShare("arm_controller"), "config", "controllers.yaml"]
     )
 
     # ros2_control_node (controller manager)

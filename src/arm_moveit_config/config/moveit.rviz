@@ -1,0 +1,37 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+  - Class: rviz_common/Views
+    Name: Views
+  - Class: moveit_ros_visualization/MotionPlanning
+    Name: MotionPlanning
+Visualization Manager:
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      Name: Grid
+      Enabled: true
+    - Class: moveit_ros_visualization/MotionPlanning
+      Name: MotionPlanning
+      Enabled: true
+      Planning Scene Topic: /monitored_planning_scene
+      Robot Description: robot_description
+      Planning Request:
+        Planning Group: arm
+        Goal State: <random>
+      Planning Scene Robot:
+        Attached Body Color: 150; 50; 150
+        Robot Alpha: 0.5
+      Planning Scene Obstacles:
+        Voxel Coloring: Z-Axis
+        Voxel Size: 0.01
+  Global Options:
+    Fixed Frame: world
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Distance: 2.5
+      Focal Point:
+        X: 0.0
+        Y: 0.0
+        Z: 0.4
+

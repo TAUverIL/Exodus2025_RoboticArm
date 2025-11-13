@@ -27,6 +27,7 @@ add_library(
   SHARED
   src/system.cpp
   src/can.cpp
+  src/fake_system.cpp
 )
 target_compile_features(cubemars_hardware PUBLIC cxx_std_17)
 target_include_directories(cubemars_hardware PUBLIC

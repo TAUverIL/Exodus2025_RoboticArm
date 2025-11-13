@@ -1,0 +1,62 @@
+# ROS2 / Colcon build artifacts
+build/
+install/
+log/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+*.egg
+
+*.vscode/
+# C++
+*.o
+*.a
+*.so
+*.dylib
+*.out
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.autosave
+
+# IDE specific
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Cursor specific
+.cursorindexingignore
+.specstory/
+
+# ROS
+*.bag
+*.db3
+
+# Testing
+*.test
+*.cover
+.pytest_cache/
+.coverage
+
+# Documentation
+*.html
+*.pdf
+
+# Backup files
+*.bak
+*.orig
+*~
+
+# Generated files
+compile_commands.json
+

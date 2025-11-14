@@ -56,7 +56,7 @@ ros2 launch arm_controller arm.launch.py use_fake_hardware:=true
 ### Launch with Real Hardware
 First, setup your CAN interface:
 ```bash
-sudo ip link set can0 type can bitrate 1000000
+sudo ip link set can0 type can bitrate 1000000 // TODO - update the real slcan commands TOMER
 sudo ip link set can0 up
 ```
 

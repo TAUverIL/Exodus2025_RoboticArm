@@ -77,10 +77,10 @@ ros2 launch arm_moveit_config moveit.launch.py use_fake_hardware:=true
 
 ## Hardware Setup
 
-The system is configured for 5 CubeMars AK70-10 motors with the following CAN IDs:
+The system is configured for 5 CubeMars motors with the following CAN IDs:
 - Joint 1: CAN ID 30 (0x1E) - Base rotation
-- Joint 2: CAN ID 31 (0x1F) - Shoulder
-- Joint 3: CAN ID 32 (0x20) - Elbow
+- Joint 2: CAN ID 31 (0x1F) - Shoulder - Cubemars AK80-6
+- Joint 3: CAN ID 32 (0x20) - Elbow - Cubemars AK80-6
 - Joint 4: CAN ID 33 (0x21) - Wrist rotation
 - Joint 5: CAN ID 34 (0x22) - Wrist bend
 

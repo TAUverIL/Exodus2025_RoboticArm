@@ -3,14 +3,14 @@ Panels:
     Name: Displays
   - Class: rviz_common/Views
     Name: Views
-  - Class: moveit_ros_visualization/MotionPlanning
+  - Class: moveit_rviz_plugin/MotionPlanning
     Name: MotionPlanning
 Visualization Manager:
   Displays:
     - Class: rviz_default_plugins/Grid
       Name: Grid
       Enabled: true
-    - Class: moveit_ros_visualization/MotionPlanning
+    - Class: moveit_rviz_plugin/MotionPlanning
       Name: MotionPlanning
       Enabled: true
       Planning Scene Topic: /monitored_planning_scene

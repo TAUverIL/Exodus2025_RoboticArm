@@ -6,7 +6,17 @@ from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, Command, FindExecutable
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
+from launch_ros.parameter_descriptions import ParameterValue
+import os
+import yaml
+from ament_index_python.packages import get_package_share_directory
 
+
+def load_yaml(package_name: str, relative_path: str):
+    pkg_share = get_package_share_directory(package_name)
+    file_path = os.path.join(pkg_share, relative_path)
+    with open(file_path, "r") as f:
+        return yaml.safe_load(f)
 
 def generate_launch_description():
     # Declare arguments
@@ -28,49 +38,58 @@ def generate_launch_description():
             FindExecutable(name="xacro"),
             " ",
             PathJoinSubstitution(
-                [FindPackageShare("arm_description"), "urdf", "arm.urdf.xacro"]
+                [FindPackageShare("arm_description"), "urdf", "Arm_MoveIt_Assembly.SLDASM.urdf"]
             ),
             " use_fake_hardware:=",
             use_fake_hardware,
         ]
     )
-    robot_description = {"robot_description": robot_description_content}
+    robot_description = {"robot_description": ParameterValue(robot_description_content, value_type=str)}
+
+
+    robot_description_semantic_content = Command(
+        [
+            FindExecutable(name="cat"),
+            " ",
+            PathJoinSubstitution(
+                [FindPackageShare("arm_moveit_config"), "config", "Arm_MoveIt_Assembly.SLDASM.srdf"]
+            ),
+        ]
+    )
 
     robot_description_semantic = {
-        "robot_description_semantic": Command(
-            [
-                FindExecutable(name="cat"),
-                " ",
-                PathJoinSubstitution(
-                    [FindPackageShare("arm_moveit_config"), "config", "arm.srdf"]
-                ),
-            ]
+        "robot_description_semantic": ParameterValue(
+            robot_description_semantic_content, value_type=str
         )
     }
+        
 
-    kinematics_yaml = PathJoinSubstitution(
-        [FindPackageShare("arm_moveit_config"), "config", "kinematics.yaml"]
-    )
+    kinematics_yaml = load_yaml("arm_moveit_config", "config/kinematics.yaml")
+
 
     # TODO: Add ompl_planning.yaml, pilz_cartesian_limits.yaml, etc.
 
     # Planning Functionality
     ompl_planning_pipeline_config = {
-        "move_group": {
+        "planning_pipelines": ["ompl"],
+        "default_planning_pipeline": "ompl",
+        "ompl": {
             "planning_plugin": "ompl_interface/OMPLPlanner",
-            "request_adapters": "default_planner_request_adapters/AddTimeOptimalParameterization "
-                              "default_planner_request_adapters/FixWorkspaceBounds "
-                              "default_planner_request_adapters/FixStartStateBounds "
-                              "default_planner_request_adapters/FixStartStateCollision "
-                              "default_planner_request_adapters/FixStartStatePathConstraints",
+            "request_adapters": (
+                "default_planner_request_adapters/AddTimeOptimalParameterization "
+                "default_planner_request_adapters/FixWorkspaceBounds "
+                "default_planner_request_adapters/FixStartStateBounds "
+                "default_planner_request_adapters/FixStartStateCollision "
+                "default_planner_request_adapters/FixStartStatePathConstraints"
+            ),
             "start_state_max_bounds_error": 0.1,
-        }
+        },
     }
 
+
     # Trajectory Execution Functionality
-    moveit_simple_controllers_yaml = PathJoinSubstitution(
-        [FindPackageShare("arm_moveit_config"), "config", "moveit_controllers.yaml"]
-    )
+    moveit_simple_controllers_yaml = load_yaml("arm_moveit_config", "config/moveit_controllers.yaml")
+
 
     trajectory_execution = {
         "moveit_manage_controllers": True,
@@ -86,9 +105,8 @@ def generate_launch_description():
         "publish_transforms_updates": True,
     }
 
-    joint_limits_yaml = PathJoinSubstitution(
-        [FindPackageShare("arm_moveit_config"), "config", "joint_limits.yaml"]
-    )
+    joint_limits_yaml = load_yaml("arm_moveit_config", "config/joint_limits.yaml")
+
 
     # Start the actual move_group node/action server
     run_move_group_node = Node(

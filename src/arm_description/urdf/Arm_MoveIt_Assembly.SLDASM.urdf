@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="Arm_MoveIt_Assembly.SLDASM">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-1.60427944681102E-05 3.87300953518382E-05 0.0414251446336533"
+        rpy="0 0 0" />
+      <mass
+        value="0.655014596547137" />
+      <inertia
+        ixx="0.00101073031912522"
+        ixy="-1.90767935198547E-07"
+        ixz="-1.70165593174546E-07"
+        iyy="0.00095401536565403"
+        iyz="4.10819611617684E-07"
+        izz="0.00188699356120778" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Arm_MoveIt_Assembly.SLDASM/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Arm_MoveIt_Assembly.SLDASM/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="link1">
+    <inertial>
+      <origin
+        xyz="-2.98433441166951E-05 -0.0483515314635655 0.054713057999731"
+        rpy="0 0 0" />
+      <mass
+        value="0.455125224183725" />
+      <inertia
+        ixx="0.000394829058309459"
+        ixy="-3.74478064371689E-07"
+        ixz="-3.68999770581118E-07"
+        iyy="0.000530839403055201"
+        iyz="2.00439805340242E-05"
+        izz="0.000397964515551658" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Arm_MoveIt_Assembly.SLDASM/meshes/link1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Arm_MoveIt_Assembly.SLDASM/meshes/link1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint1"
+    type="revolute">
+    <origin
+      xyz="0 0 0.0775"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="link1" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="link2">
+    <inertial>
+      <origin
+        xyz="9.27579481573709E-05 0.0175182399290933 0.275472999386939"
+        rpy="0 0 0" />
+      <mass
+        value="0.891856461721987" />
+      <inertia
+        ixx="0.00435475407288075"
+        ixy="-1.03883193767188E-07"
+        ixz="-2.20593156848708E-07"
+        iyy="0.0045575625095459"
+        iyz="-2.0247268665606E-06"
+        izz="0.000474727840907135" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Arm_MoveIt_Assembly.SLDASM/meshes/link2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Arm_MoveIt_Assembly.SLDASM/meshes/link2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint2"
+    type="revolute">
+    <origin
+      xyz="0 -0.024 0.06"
+      rpy="0 0 0" />
+    <parent
+      link="link1" />
+    <child
+      link="link2" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="link3">
+    <inertial>
+      <origin
+        xyz="-0.279853886139342 0.0148848609580054 -8.90398865749376E-14"
+        rpy="0 0 0" />
+      <mass
+        value="0.820660258517619" />
+      <inertia
+        ixx="0.000344535085998629"
+        ixy="-4.48152667831305E-07"
+        ixz="-2.93896707624529E-09"
+        iyy="0.00648723879471234"
+        iyz="-1.18705365636058E-19"
+        izz="0.00626772615915786" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Arm_MoveIt_Assembly.SLDASM/meshes/link3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Arm_MoveIt_Assembly.SLDASM/meshes/link3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint3"
+    type="revolute">
+    <origin
+      xyz="0.00020722 0.0507 0.39997"
+      rpy="0 0 0" />
+    <parent
+      link="link2" />
+    <child
+      link="link3" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="link4">
+    <inertial>
+      <origin
+        xyz="8.93211447726694E-05 -0.053367466841865 -0.0860702805514776"
+        rpy="0 0 0" />
+      <mass
+        value="0.284019990052222" />
+      <inertia
+        ixx="0.0002676570674362"
+        ixy="-3.02110627748532E-07"
+        ixz="-4.10818936428236E-07"
+        iyy="0.000253734082405407"
+        iyz="-3.16043936161857E-05"
+        izz="0.000344774781306503" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Arm_MoveIt_Assembly.SLDASM/meshes/link4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Arm_MoveIt_Assembly.SLDASM/meshes/link4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint4"
+    type="revolute">
+    <origin
+      xyz="-0.44676 0.035 0"
+      rpy="0 0 0" />
+    <parent
+      link="link3" />
+    <child
+      link="link4" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="End_effector">
+    <inertial>
+      <origin
+        xyz="-0.00291436016362501 -0.00153953625183378 -0.0697917938513681"
+        rpy="0 0 0" />
+      <mass
+        value="0.891224455695713" />
+      <inertia
+        ixx="0.00266784691683874"
+        ixy="-2.00928120275424E-06"
+        ixz="1.12696986555021E-05"
+        iyy="0.000652543524415568"
+        iyz="-9.75739303299027E-06"
+        izz="0.00233302824155854" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Arm_MoveIt_Assembly.SLDASM/meshes/End_effector.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Arm_MoveIt_Assembly.SLDASM/meshes/End_effector.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="end_effector"
+    type="fixed">
+    <origin
+      xyz="0 -0.0617 -0.1125"
+      rpy="0 0 0" />
+    <parent
+      link="link4" />
+    <child
+      link="End_effector" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+</robot>

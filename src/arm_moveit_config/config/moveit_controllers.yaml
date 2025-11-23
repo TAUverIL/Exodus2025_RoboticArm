@@ -3,7 +3,6 @@ moveit_controller_manager: moveit_simple_controller_manager/MoveItSimpleControll
 moveit_simple_controller_manager:
   controller_names:
     - arm_controller
-    - joint_state_broadcaster
 
   arm_controller:
     type: FollowJointTrajectory
@@ -14,8 +13,3 @@ moveit_simple_controller_manager:
       - Joint2
       - Joint3
       - Joint4
-
-  joint_state_broadcaster:
-    type: JointStateBroadcaster
-
-

@@ -17,7 +17,7 @@
       </hardware>
 
       <!-- Joint 1 -->
-      <joint name="joint1">
+      <joint name="Joint1">
         <param name="can_id">30</param>
         <param name="pole_pairs">21</param>
         <param name="gear_ratio">9</param>
@@ -33,7 +33,7 @@
       </joint>
 
       <!-- Joint 2 -->
-      <joint name="joint2">
+      <joint name="Joint2">
         <param name="can_id">31</param>
         <param name="pole_pairs">21</param>
         <param name="gear_ratio">64</param>
@@ -49,7 +49,7 @@
       </joint>
 
       <!-- Joint 3 -->
-      <joint name="joint3">
+      <joint name="Joint3">
         <param name="can_id">32</param>
         <param name="pole_pairs">21</param>
         <param name="gear_ratio">64</param>
@@ -65,7 +65,7 @@
       </joint>
 
       <!-- Joint 4 -->
-      <joint name="joint4">
+      <joint name="Joint4">
         <param name="can_id">33</param>
         <param name="pole_pairs">21</param>
         <param name="gear_ratio">9</param>
@@ -81,7 +81,7 @@
       </joint>
 
       <!-- Joint 5 -->
-      <joint name="joint5">
+      <joint name="Joint5">
         <param name="can_id">34</param>
         <param name="pole_pairs">21</param>
         <param name="gear_ratio">9</param>

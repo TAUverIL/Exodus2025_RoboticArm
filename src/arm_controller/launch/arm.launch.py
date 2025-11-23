@@ -8,6 +8,7 @@ from launch.conditions import IfCondition
 from launch.event_handlers import OnProcessExit
 from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
+from launch_ros.parameter_descriptions import ParameterValue
 from launch_ros.substitutions import FindPackageShare
 
 
@@ -17,7 +18,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "use_fake_hardware",
-            default_value="false",
+            default_value="true",
             description="Start robot with fake hardware mirroring command to its states.",
         )
     )
@@ -63,7 +64,9 @@ def generate_launch_description():
             can_interface,
         ]
     )
-    robot_description = {"robot_description": robot_description_content}
+    robot_description = {
+        "robot_description": ParameterValue(robot_description_content, value_type=str)
+    }
 
     # Controllers configuration
     robot_controllers = PathJoinSubstitution(
@@ -106,27 +109,27 @@ def generate_launch_description():
         arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
     )
 
-    # Forward Position Controller Spawner (delayed start)
-    forward_position_controller_spawner = Node(
+    # Arm Joint Trajectory Controller Spawner (start after joint_state_broadcaster)
+    arm_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["forward_position_controller", "--controller-manager", "/controller_manager"],
+        arguments=["arm_controller", "--controller-manager", "/controller_manager"],
     )
 
-    # Delay start of forward_position_controller after joint_state_broadcaster
-    delay_forward_controller_spawner_after_joint_state_broadcaster = RegisterEventHandler(
+    # Delay start of arm_controller after joint_state_broadcaster
+    delay_arm_controller_after_jsb = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=joint_state_broadcaster_spawner,
-            on_exit=[forward_position_controller_spawner],
+            on_exit=[arm_controller_spawner],
         )
     )
 
     nodes = [
         control_node,
         robot_state_pub_node,
-        rviz_node,
+        # rviz_node,
         joint_state_broadcaster_spawner,
-        delay_forward_controller_spawner_after_joint_state_broadcaster,
+        delay_arm_controller_after_jsb,
     ]
 
     return LaunchDescription(declared_arguments + nodes)

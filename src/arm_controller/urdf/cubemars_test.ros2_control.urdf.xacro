@@ -10,7 +10,7 @@
     </hardware>
 
     <!-- Five actuator joints with CAN IDs 30-34 -->
-    <joint name="joint1">
+    <joint name="Joint1">
       <param name="can_id">30</param>      <!-- CAN ID 30 (0x1E) -->
       <param name="pole_pairs">21</param>
       <param name="gear_ratio">9</param>
@@ -25,7 +25,7 @@
       <state_interface name="effort"/>
     </joint>
 
-    <joint name="joint2">
+    <joint name="Joint2">
       <param name="can_id">31</param>      <!-- CAN ID 31 (0x1F) -->
       <param name="pole_pairs">21</param>
       <param name="gear_ratio">64</param>
@@ -40,7 +40,7 @@
       <state_interface name="effort"/>
     </joint>
 
-    <joint name="joint3">
+    <joint name="Joint3">
       <param name="can_id">32</param>      <!-- CAN ID 32 (0x20) -->
       <param name="pole_pairs">21</param>
       <param name="gear_ratio">64</param>
@@ -55,7 +55,7 @@
       <state_interface name="effort"/>
     </joint>
 
-    <joint name="joint4">
+    <joint name="Joint4">
       <param name="can_id">33</param>      <!-- CAN ID 33 (0x21) -->
       <param name="pole_pairs">21</param>
       <param name="gear_ratio">9</param>
@@ -70,7 +70,7 @@
       <state_interface name="effort"/>
     </joint>
 
-    <joint name="joint5">
+    <joint name="Joint5">
       <param name="can_id">34</param>      <!-- CAN ID 34 (0x22) -->
       <param name="pole_pairs">21</param>
       <param name="gear_ratio">9</param>

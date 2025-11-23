@@ -329,4 +329,42 @@
     <axis
       xyz="0 0 0" />
   </joint>
+
+  <!-- ros2_control configuration for fake hardware (used by MoveIt) -->
+  <ros2_control name="ExodusArmSystem" type="system">
+    <hardware>
+      <!-- Use fake hardware for testing/simulation -->
+      <plugin>cubemars_hardware/FakeCubeMarsHardware</plugin>
+    </hardware>
+
+    <!-- Joint 1 -->
+    <joint name="Joint1">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <!-- Joint 2 -->
+    <joint name="Joint2">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <!-- Joint 3 -->
+    <joint name="Joint3">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <!-- Joint 4 -->
+    <joint name="Joint4">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+  </ros2_control>
+
 </robot>

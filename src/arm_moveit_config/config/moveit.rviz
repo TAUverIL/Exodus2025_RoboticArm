@@ -1,6 +1,9 @@
 Panels:
   - Class: rviz_common/Displays
     Name: Displays
+    Property Tree Widget:
+      Expanded:
+        - /MotionPlanning1
   - Class: rviz_common/Views
     Name: Views
   - Class: moveit_rviz_plugin/MotionPlanning
@@ -13,8 +16,17 @@ Visualization Manager:
     - Class: moveit_rviz_plugin/MotionPlanning
       Name: MotionPlanning
       Enabled: true
+      Planned Path:
+        Loop Animation: true
+        State Display Time: 0.05 s
+        Trajectory Topic: display_planned_path
       Planning Scene Topic: /monitored_planning_scene
       Robot Description: robot_description
+      Scene Geometry:
+        Scene Alpha: 1
+      Scene Robot:
+        Robot Alpha: 0.5
+      Value: true
       Planning Request:
         Planning Group: arm
         Goal State: <random>
@@ -26,6 +38,11 @@ Visualization Manager:
         Voxel Size: 0.01
   Global Options:
     Fixed Frame: world
+  Tools:
+    - Class: rviz_default_plugins/Interact
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select
+  Value: true
   Views:
     Current:
       Class: rviz_default_plugins/Orbit

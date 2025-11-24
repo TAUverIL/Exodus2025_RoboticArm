@@ -91,7 +91,12 @@ def generate_launch_description():
     }
         
 
-    kinematics_yaml = load_yaml("arm_moveit_config", "config/kinematics.yaml")
+    robot_description_kinematics = {
+    "robot_description_kinematics": load_yaml(
+        "arm_moveit_config",
+        "config/kinematics.yaml"
+    )
+}
 
 
     # TODO: Add ompl_planning.yaml, pilz_cartesian_limits.yaml, etc.
@@ -182,7 +187,7 @@ def generate_launch_description():
         parameters=[
             robot_description,
             robot_description_semantic,
-            kinematics_yaml,
+            robot_description_kinematics,
             ompl_planning_pipeline_config,
             trajectory_execution,
             moveit_simple_controllers_yaml,
@@ -207,7 +212,7 @@ def generate_launch_description():
             robot_description,
             robot_description_semantic,
             ompl_planning_pipeline_config,
-            kinematics_yaml,
+            robot_description_kinematics,
         ],
     )
 

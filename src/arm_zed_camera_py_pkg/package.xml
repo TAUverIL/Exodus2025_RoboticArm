@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>arm_zed_camera_py_pkg</name>           <!-- This is your ROS package name -->
+  <version>0.0.1</version>
+  <description>A ROS 2 Python package using YOLO and ZED for person detection.</description>
+  <maintainer email="arm2025@todo.todo">arm2025</maintainer>
+  <license>MIT</license>
+
+  <!-- Build tool needed for Python packages -->
+  <buildtool_depend>ament_python</buildtool_depend>
+
+  <!-- Dependencies your runtime code needs -->
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>cv_bridge</exec_depend>
+
+  <!-- Dependencies for testing -->
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
+
+  <!-- Export Python build type -->
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

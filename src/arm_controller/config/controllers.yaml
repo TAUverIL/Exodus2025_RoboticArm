@@ -16,6 +16,7 @@ arm_controller:
       - Joint2
       - Joint3
       - Joint4
+      - Joint5
     command_interfaces:
       - position
     state_interfaces:

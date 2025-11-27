@@ -318,7 +318,7 @@
   </link>
   <joint
     name="end_effector"
-    type="fixed">
+    type="revolute">
     <origin
       xyz="0 -0.0617 -0.1125"
       rpy="0 0 0" />
@@ -327,7 +327,12 @@
     <child
       link="End_effector" />
     <axis
-      xyz="0 0 0" />
+      xyz="0 0 -1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
   </joint>
 
   <!-- ros2_control configuration for fake hardware (used by MoveIt) -->

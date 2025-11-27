@@ -27,21 +27,21 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "use_fake_hardware",
-            default_value="true",
+            default_value="false",
             description="Start robot with fake hardware mirroring command to its states.",
         )
     )
     declared_arguments.append(
         DeclareLaunchArgument(
             "launch_internal_joint_state_publisher",
-            default_value="true",
+            default_value="false",
             description="Launch the internal joint_state_publisher (set false if an external one already runs)",
         )
     )
     declared_arguments.append(
         DeclareLaunchArgument(
             "launch_internal_robot_state_publisher",
-            default_value="true",
+            default_value="false",
             description="Launch the internal robot_state_publisher (set false if an external one already runs)",
         )
     )
@@ -222,7 +222,7 @@ def generate_launch_description():
        executable="joint_state_publisher",
        name="joint_state_publisher",
        output="screen",
-       condition=IfCondition(launch_internal_joint_state_publisher),
+       condition=IfCondition(use_fake_hardware),
     )
 
     # Robot State Publisher
@@ -242,6 +242,26 @@ def generate_launch_description():
         name="static_tf_world_to_base",
         arguments=["0", "0", "0", "0", "0", "0", "world", "base_link"],
     )
+    servo_yaml = PathJoinSubstitution(
+        [FindPackageShare("arm_moveit_config"), "config", "servo.yaml"]
+    )
+
+    # MoveIt Servo node
+    servo_node = Node(
+        package="moveit_servo",
+        executable="servo_node_main",
+        name="servo_node",
+        output="screen",
+        parameters=[
+            servo_yaml,
+            robot_description,
+            robot_description_semantic,
+            robot_description_kinematics,
+            {"move_group_namespace": "/arm"}
+        ],
+        
+    )
+
 
     # ros2_control node (if using fake hardware, this will be important)
     # TODO: Add controller manager node when controllers are configured
@@ -255,6 +275,7 @@ def generate_launch_description():
         run_move_group_node,
         rviz_node,
         static_tf_world_to_base,
+        servo_node,
     ]
 
     return LaunchDescription(declared_arguments + nodes_to_start)

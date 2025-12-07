@@ -21,5 +21,11 @@ install(
   DESTINATION share/${PROJECT_NAME}
 )
 
+install(
+  PROGRAMS
+  launch/joy_to_servo.py
+  DESTINATION share/${PROJECT_NAME}/launch
+)
+
 ament_package()
 

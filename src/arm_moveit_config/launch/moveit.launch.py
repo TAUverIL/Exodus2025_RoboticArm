@@ -52,12 +52,20 @@ def generate_launch_description():
             description="Launch ros2_control (controller_manager + controllers) for the MoveIt robot model",
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "use_servo",
+            default_value="false",
+            description="Launch servo node and teleop for Xbox controller",
+        )
+    )
 
     # Initialize arguments
     use_fake_hardware = LaunchConfiguration("use_fake_hardware")
     launch_internal_joint_state_publisher = LaunchConfiguration("launch_internal_joint_state_publisher")
     launch_internal_robot_state_publisher = LaunchConfiguration("launch_internal_robot_state_publisher")
     launch_ros2_control = LaunchConfiguration("launch_ros2_control")
+    use_servo = LaunchConfiguration("use_servo")
 
     # Planning context
     robot_description_content = Command(
@@ -259,7 +267,26 @@ def generate_launch_description():
             robot_description_kinematics,
             {"move_group_namespace": "/arm"}
         ],
-        
+        condition=IfCondition(use_servo),
+    )
+
+    # Joy Node
+    joy_node = Node(
+        package="joy",
+        executable="joy_node",
+        name="joy_node",
+        output="screen",
+        condition=IfCondition(use_servo),
+    )
+
+    # Joy to Servo Node (Custom Python node replacing C++ JoyToServoPub)
+    joy_to_servo_node = Node(
+        package=None,
+        executable=PathJoinSubstitution([FindPackageShare("arm_moveit_config"), "launch", "joy_to_servo.py"]),
+        name="joy_to_servo",
+        output="screen",
+        parameters=[{"frame_id": "base_link"}],
+        condition=IfCondition(use_servo),
     )
 
 
@@ -276,6 +303,8 @@ def generate_launch_description():
         rviz_node,
         static_tf_world_to_base,
         servo_node,
+        joy_node,
+        joy_to_servo_node,
     ]
 
     return LaunchDescription(declared_arguments + nodes_to_start)

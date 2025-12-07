@@ -1,22 +1,26 @@
-# config/servo.yaml
-publish_period: 0.01  # seconds
+servo_node:
+  ros__parameters:
+    publish_period: 0.01  # seconds
 
-# Twist commands topic (from Xbox controller or teleop node)
-cartesian_command_in_topic: "/servo_twist"
+    # Twist commands topic (from Xbox controller or teleop node)
+    cartesian_command_in_topic: "/servo_twist"
 
-# Output topics (to robot)
-cartesian_command_out_topic: "/servo_server/delta_twist_cmds"
-joint_command_out_topic: "/servo_server/joint_cmds"
+    # Output topics (to robot)
+    cartesian_command_out_topic: "/servo_server/delta_twist_cmds"
+    joint_command_out_topic: "/servo_server/joint_cmds"
 
-# Linear and rotational scaling
-scale_linear: 0.1
-scale_rotational: 0.5
+    # Input topics
+    joint_command_in_topic: "/servo_joint_jog"
 
-# Joint velocity limits
-joint_velocity_limits:
-  joint_1: 1.0
-  joint_2: 1.0
-  joint_3: 1.0
-  joint_4: 1.0
-  joint_5: 1.0
+    # Linear and rotational scaling
+    scale_linear: 0.1
+    scale_rotational: 0.5
+
+    # Joint velocity limits
+    joint_velocity_limits:
+      joint_1: 1.0
+      joint_2: 1.0
+      joint_3: 1.0
+      joint_4: 1.0
+      joint_5: 1.0
 

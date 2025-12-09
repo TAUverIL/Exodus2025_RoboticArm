@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<robot name="cubemars_test" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ros2_control block using CubeMarsSystemHardware -->
+  <ros2_control name="cubemars_system" type="system">
+    <hardware>
+      <!-- This must match the plugin class name from cubemars_hardware -->
+      <plugin>cubemars_hardware/CubeMarsSystemHardware</plugin>
+
+      <!-- CAN interface to use -->
+      <param name="can_interface">slcan0</param>  <!-- or can0 -->
+    </hardware>
+
+    <!-- Joint 1: CAN ID 30 -->
+    <joint name="joint1">
+      <param name="can_id">30</param>
+
+      <!-- Placeholder physical parameters -> replace with real ones later -->
+      <param name="pole_pairs">7</param>
+      <param name="gear_ratio">9</param>
+      <param name="kt">0.1</param>
+
+      <param name="vel_limit">1000</param>
+      <param name="acc_limit">1000</param>
+      <param name="trq_limit">5.0</param>
+      <param name="enc_off">0.0</param>
+      <param name="read_only">0</param>
+    </joint>
+
+    <!-- Joint 2: CAN ID 31 -->
+    <joint name="joint2">
+      <param name="can_id">31</param>
+
+      <param name="pole_pairs">7</param>
+      <param name="gear_ratio">1</param>
+      <param name="kt">0.1</param>
+
+      <param name="vel_limit">1000</param>
+      <param name="acc_limit">1000</param>
+      <param name="trq_limit">5.0</param>
+      <param name="enc_off">0.0</param>
+      <param name="read_only">0</param>
+    </joint>
+
+    <!-- Joint 3: CAN ID 32 -->
+    <joint name="joint3">
+      <param name="can_id">32</param>
+
+      <param name="pole_pairs">7</param>
+      <param name="gear_ratio">1</param>
+      <param name="kt">0.1</param>
+
+      <param name="vel_limit">1000</param>
+      <param name="acc_limit">1000</param>
+      <param name="trq_limit">5.0</param>
+      <param name="enc_off">0.0</param>
+      <param name="read_only">0</param>
+    </joint>
+
+    <!-- Joint 4: CAN ID 33 -->
+    <joint name="joint4">
+      <param name="can_id">33</param>
+
+      <param name="pole_pairs">7</param>
+      <param name="gear_ratio">9</param>
+      <param name="kt">0.1</param>
+
+      <param name="vel_limit">1000</param>
+      <param name="acc_limit">1000</param>
+      <param name="trq_limit">5.0</param>
+      <param name="enc_off">0.0</param>
+      <param name="read_only">0</param>
+    </joint>
+
+    <!-- Joint 5: CAN ID 34 -->
+    <joint name="joint5">
+      <param name="can_id">34</param>
+
+      <param name="pole_pairs">7</param>
+      <param name="gear_ratio">9</param>
+      <param name="kt">0.1</param>
+
+      <param name="vel_limit">1000</param>
+      <param name="acc_limit">1000</param>
+      <param name="trq_limit">5.0</param>
+      <param name="enc_off">0.0</param>
+      <param name="read_only">0</param>
+    </joint>
+
+  </ros2_control>
+</robot>

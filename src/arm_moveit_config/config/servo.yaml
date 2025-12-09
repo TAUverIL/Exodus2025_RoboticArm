@@ -1,22 +1,21 @@
-# config/servo.yaml
-publish_period: 0.01  # seconds
-
-# Twist commands topic (from Xbox controller or teleop node)
-cartesian_command_in_topic: "/servo_twist"
-
-# Output topics (to robot)
-cartesian_command_out_topic: "/servo_server/delta_twist_cmds"
-joint_command_out_topic: "/servo_server/joint_cmds"
-
-# Linear and rotational scaling
-scale_linear: 0.1
-scale_rotational: 0.5
-
-# Joint velocity limits
-joint_velocity_limits:
-  joint_1: 1.0
-  joint_2: 1.0
-  joint_3: 1.0
-  joint_4: 1.0
-  joint_5: 1.0
-
+servo_node:
+  ros__parameters:
+    move_group_name: arm
+    command_out_topic: /arm_controller/joint_trajectory
+    command_out_type: trajectory_msgs/JointTrajectory
+    publish_period: 0.04
+    cartesian_command_in_topic: /servo_twist
+    planning_frame: base_link
+    ee_frame_name: End_effector
+    robot_link_command_frame: base_link
+    use_gazebo: false
+    status_topic: status
+    incoming_command_timeout: 0.5
+    scale_linear: 0.4
+    scale_rotational: 0.2
+    joint_velocity_limits:
+      Joint1: 1.0
+      Joint2: 1.0
+      Joint3: 1.0
+      Joint4: 1.0
+      Joint5: 1.0

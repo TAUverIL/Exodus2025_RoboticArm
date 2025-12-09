@@ -246,21 +246,22 @@ def generate_launch_description():
         [FindPackageShare("arm_moveit_config"), "config", "servo.yaml"]
     )
 
+    # Get parameters for the Servo node
+    servo_yaml = load_yaml("moveit_servo", "config/panda_simulated_config.yaml")
+    servo_params = {"moveit_servo": servo_yaml}
+    
     # MoveIt Servo node
-    servo_node = Node(
-        package="moveit_servo",
-        executable="servo_node_main",
-        name="servo_node",
-        output="screen",
-        parameters=[
-            servo_yaml,
-            robot_description,
-            robot_description_semantic,
-            robot_description_kinematics,
-            {"move_group_namespace": "/arm"}
-        ],
-        
-    )
+    # servo_node = Node(
+    #     package="moveit_servo",
+    #     executable="servo_node_main",
+    #     parameters=[
+    #         servo_params,
+    #         moveit_config.robot_description,
+    #         moveit_config.robot_description_semantic,
+    #         moveit_config.robot_description_kinematics,
+    #     ],
+    #     output="screen",
+    # )
 
 
     # ros2_control node (if using fake hardware, this will be important)
@@ -275,7 +276,7 @@ def generate_launch_description():
         run_move_group_node,
         rviz_node,
         static_tf_world_to_base,
-        servo_node,
+        # servo_node,
     ]
 
     return LaunchDescription(declared_arguments + nodes_to_start)

@@ -35,8 +35,8 @@
       <!-- Joint 2 -->
       <joint name="Joint2">
         <param name="can_id">31</param>
-        <param name="pole_pairs">21</param>
-        <param name="gear_ratio">64</param>
+        <param name="pole_pairs">21</param>             
+        <param name="gear_ratio">1</param>
         <param name="kt">0.105</param>
         <param name="vel_limit">12.0</param>
         <param name="acc_limit">3.0</param>

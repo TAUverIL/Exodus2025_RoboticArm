@@ -1,21 +1,39 @@
 servo_node:
   ros__parameters:
+    # --- MoveIt Properties ---
     move_group_name: arm
-    command_out_topic: /arm_controller/joint_trajectory
-    command_out_type: trajectory_msgs/JointTrajectory
-    publish_period: 0.04
-    cartesian_command_in_topic: /servo_twist
     planning_frame: base_link
     ee_frame_name: End_effector
     robot_link_command_frame: base_link
-    use_gazebo: false
-    status_topic: status
+    
+    # --- Incoming Commands ---
+    command_in_type: "unitless" # REQUIRED for joystick input (-1.0 to 1.0)
+    cartesian_command_in_topic: /servo_twist
     incoming_command_timeout: 0.5
+    
+    # --- Outgoing Commands ---
+    command_out_topic: /arm_controller/joint_trajectory
+    command_out_type: trajectory_msgs/JointTrajectory
+    publish_period: 0.04
+    
+    # --- Scaling (Speed) ---
     scale_linear: 0.4
     scale_rotational: 0.2
+    
+    # --- Collision Checking (Safety) ---
+    check_collisions: true
+    collision_check_rate: 10.0
+    self_collision_proximity_threshold: 0.01
+    scene_collision_proximity_threshold: 0.02
+    
+    # --- Joint Velocity Limits (Safety) ---
     joint_velocity_limits:
       Joint1: 1.0
       Joint2: 1.0
       Joint3: 1.0
       Joint4: 1.0
       Joint5: 1.0
+
+    # --- Other ---
+    use_gazebo: false
+    status_topic: status

@@ -10,6 +10,8 @@ from launch_ros.parameter_descriptions import ParameterValue
 import os
 import yaml
 from ament_index_python.packages import get_package_share_directory
+from launch.conditions import IfCondition
+from launch.event_handlers import OnProcessExit
 
 
 def load_yaml(package_name: str, relative_path: str):
@@ -17,9 +19,6 @@ def load_yaml(package_name: str, relative_path: str):
     file_path = os.path.join(pkg_share, relative_path)
     with open(file_path, "r") as f:
         return yaml.safe_load(f)
-
-from launch.conditions import IfCondition
-from launch.event_handlers import OnProcessExit
 
 def generate_launch_description():
     # Declare arguments
@@ -52,12 +51,20 @@ def generate_launch_description():
             description="Launch ros2_control (controller_manager + controllers) for the MoveIt robot model",
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "use_servo",
+            default_value="false",
+            description="Launch Servo node for teleoperation with a joystick",
+        )
+    )
 
     # Initialize arguments
     use_fake_hardware = LaunchConfiguration("use_fake_hardware")
     launch_internal_joint_state_publisher = LaunchConfiguration("launch_internal_joint_state_publisher")
     launch_internal_robot_state_publisher = LaunchConfiguration("launch_internal_robot_state_publisher")
     launch_ros2_control = LaunchConfiguration("launch_ros2_control")
+    use_servo = LaunchConfiguration("use_servo")
 
     # Planning context
     robot_description_content = Command(
@@ -242,13 +249,61 @@ def generate_launch_description():
         name="static_tf_world_to_base",
         arguments=["0", "0", "0", "0", "0", "0", "world", "base_link"],
     )
-    servo_yaml = PathJoinSubstitution(
-        [FindPackageShare("arm_moveit_config"), "config", "servo.yaml"]
+    # --- SERVO SETUP ---
+    # Get parameters for the Servo node
+    servo_yaml_content = load_yaml("arm_moveit_config", "config/servo.yaml")
+    
+    # Check if the yaml is nested under servo_node/ros__parameters (typical for param dumps)
+    # or if it is flat. We need the flat parameters for the node definition.
+    if 'servo_node' in servo_yaml_content and 'ros__parameters' in servo_yaml_content['servo_node']:
+        servo_params_flat = servo_yaml_content['servo_node']['ros__parameters']
+    else:
+        servo_params_flat = servo_yaml_content
+
+    # MoveIt Servo expects parameters under the "moveit_servo" namespace
+    servo_params = {"moveit_servo": servo_params_flat}
+    
+    # MoveIt Servo Node
+    servo_node = Node(
+        package="moveit_servo",
+        executable="servo_node_main",
+        parameters=[
+            servo_params,
+            robot_description,
+            robot_description_semantic,
+            robot_description_kinematics,
+        ],
+        output="screen",
+        condition=IfCondition(use_servo),
     )
 
-    # Get parameters for the Servo node
-    servo_yaml = load_yaml("moveit_servo", "config/panda_simulated_config.yaml")
-    servo_params = {"moveit_servo": servo_yaml}
+    # Joy Node (Driver for XBOX controller)
+    joy_node = Node(
+        package="joy",
+        executable="joy_node",
+        name="joy_node",
+        output="screen",
+        condition=IfCondition(use_servo),
+    )
+
+    # Teleop Twist Joy Node (Converts Joy -> Twist for Servo)
+    # Remaps /cmd_vel to /servo_twist as defined in your servo.yaml
+    xbox_config_file = PathJoinSubstitution(
+        [FindPackageShare("arm_moveit_config"), "config", "xbox_teleop.yaml"]
+    )
+
+    teleop_twist_joy_node = Node(
+        package="teleop_twist_joy",
+        executable="teleop_node",
+        name="teleop_twist_joy_node",
+        output="screen",
+        parameters=[
+            xbox_config_file, 
+            {"publish_stamped_twist": True}
+        ],
+        remappings=[("/cmd_vel", "/servo_twist")],
+        condition=IfCondition(use_servo),
+    )
     
     # MoveIt Servo node
     # servo_node = Node(
@@ -276,7 +331,9 @@ def generate_launch_description():
         run_move_group_node,
         rviz_node,
         static_tf_world_to_base,
-        # servo_node,
+        servo_node,
+        joy_node,
+        teleop_twist_joy_node,
     ]
 
     return LaunchDescription(declared_arguments + nodes_to_start)

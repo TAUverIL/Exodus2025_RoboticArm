@@ -1,0 +1,31 @@
+teleop_twist_joy_node:
+  ros__parameters:
+    # "Enable" button (Button 5 is usually RB on Xbox)
+    # You must HOLD this button to move.
+    require_enable_button: true
+    enable_button: 5
+    
+    # Linear Motion (Left Stick)
+    # Axis 1: Left Stick Up/Down -> Move Forward/Backward (X)
+    # Axis 0: Left Stick Left/Right -> Move Left/Right (Y)
+    # Axis 4: Right Stick Up/Down -> Move Up/Down (Z)
+    axis_linear:
+      x: 1
+      y: 0
+      z: 4
+
+    # Angular Motion (Right Stick)
+    # Axis 3: Right Stick Left/Right -> Rotate (Yaw)
+    axis_angular:
+      yaw: 3
+      # If you need pitch/roll, map them here (e.g., pitch: 4) but typically
+      # we separate Linear Z and Pitch to different modes or buttons.
+      # For now, let's keep Right Stick Vertical as Linear Z (Up/Down).
+
+    # Scaling (Speed)
+    scale_linear:
+      x: 0.4
+      y: 0.4
+      z: 0.4
+    scale_angular:
+      yaw: 0.2

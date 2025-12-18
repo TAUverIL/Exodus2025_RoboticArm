@@ -36,6 +36,6 @@ def detect_orange_objects(image_bgr):
             cv2.rectangle(image_bgr, (x, y), (x + w, y + h), (0, 140, 255), 2)
             cv2.putText(image_bgr, "Orange Object", (x, y - 10),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
-            print(f"[orange_detector] Detected orange object at (x={x}, y={y}, w={w}, h={h}) with area={area}")
+            #print(f"[orange_detector] Detected orange object at (x={x}, y={y}, w={w}, h={h}) with area={area}") #commanted out, as it was too laggy
 
     return image_bgr, boxes, mask

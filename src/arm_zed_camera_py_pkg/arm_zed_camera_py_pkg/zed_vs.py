@@ -21,7 +21,7 @@ class ZEDCameraNode(Node):
 
         self.zed = sl.Camera()
         init_params = sl.InitParameters()
-        init_params.depth_mode = sl.DEPTH_MODE.NEURAL  # Updated per ZED warning for better depth
+        init_params.depth_mode = sl.DEPTH_MODE.PERFORMANCE #changed from NEURAL to PERFORMANCE  # Updated per ZED warning for better depth
         init_params.coordinate_units = sl.UNIT.METER
 
 
@@ -137,9 +137,9 @@ class ZEDCameraNode(Node):
             # left_rgb, orange_boxes = detect_orange_objects(left_rgb)
             image, boxes, mask = detect_orange_objects(left_rgb)
             cv2.imshow("Orange Mask", mask)
-            cv2.waitKey(1)
+            #cv2.waitKey(1) #tomer commanted out
 
-            self.get_logger().info("[orange_detector] Detected orange object")
+            #self.get_logger().info("[orange_detector] Detected orange object") #commanted out, as it was too laggy
 
             left_rgb = aruco_detection(left_rgb)
 

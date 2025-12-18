@@ -1,0 +1,248 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+#shopt -s globstar
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color|*-256color) color_prompt=yes;;
+esac
+
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+#force_color_prompt=yes
+
+if [ -n "$force_color_prompt" ]; then
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+	# We have color support; assume it's compliant with Ecma-48
+	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+	# a case would tend to support setf rather than setaf.)
+	color_prompt=yes
+    else
+	color_prompt=
+    fi
+fi
+
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+unset color_prompt force_color_prompt
+
+# If this is an xterm set the title to user@host:dir
+##colcon build --packages-select arm_zed_camera_py_pkg --cmake-clean-cache --symlink-install --event-handlers console_direct+
+case "$TERM" in
+xterm*|rxvt*)
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    ;;
+*)
+    ;;
+esac
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+# colored GCC warnings and errors
+#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+###########################################################
+# 🧱 BASIC FILE AND DIRECTORY ALIASES
+###########################################################
+alias ll='ls -alF'         # detailed list view
+alias la='ls -A'           # list all except . and ..
+alias l='ls -CF'           # compact list with indicators
+alias sl='ls'              # fix common typo
+alias mkdirp='mkdir -pv'   # make directory tree (verbose)
+alias rm='rm -i'           # confirm before deleting files
+alias cp='cp -i'           # confirm before overwriting
+alias mv='mv -i'           # confirm before overwriting
+alias untar='tar -xvf'     # extract tar files
+alias targz='tar -czvf'    # create .tar.gz archives
+alias untarxz='tar -xvJf'  # extract .tar.xz archives
+
+###########################################################
+# 🧭 NAVIGATION SHORTCUTS
+###########################################################
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias -- -='cd -'          # go back to previous directory
+
+###########################################################
+# ⚡ TERMINAL CONVENIENCE
+###########################################################
+alias c='clear'
+alias cls='clear'
+alias q='exit'
+alias please='sudo $(history -p !!)'   # rerun last command with sudo
+alias myip='curl ifconfig.me'          # show external IP
+alias pingg='ping google.com'          # quick ping test
+
+###########################################################
+# 🧮 SYSTEM INFORMATION
+###########################################################
+alias df='df -h'                    # human-readable disk usage
+alias du='du -h --max-depth=1'      # folder sizes
+alias free='free -h'                # readable memory usage
+alias psu='ps aux --sort=-%mem | head'  # top memory users
+alias cpuinfo='lscpu'               # CPU information
+alias meminfo='cat /proc/meminfo | less' # memory info
+alias ports='sudo netstat -tulanp'  # active ports and processes
+
+###########################################################
+# 📦 PACKAGE MANAGEMENT (APT-BASED)
+###########################################################
+alias update='sudo apt update && sudo apt upgrade -y'
+alias install='sudo apt install'
+alias remove='sudo apt remove'
+alias search='apt search'
+
+###########################################################
+# 🐙 GIT SHORTCUTS
+###########################################################
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit -m'
+alias gp='git push'
+alias gl='git pull'
+alias gd='git diff'
+alias gb='git branch'
+alias gco='git checkout'
+alias gcl='git clone'
+
+###########################################################
+# 🐍 PYTHON / DEVELOPMENT HELPERS
+###########################################################
+alias py='python3'
+alias pipu='pip install --upgrade pip'
+alias serve='python3 -m http.server'  # quick local web server
+
+###########################################################
+# 🤖 ROS2 UTILITIES
+###########################################################
+alias srcros='source /opt/ros/humble/setup.bash && echo "ROS2 sourced ✅"'
+alias srcws='source ~/ros2_ws/install/setup.bash && echo "Workspace sourced ✅"'
+alias buildws='colcon build --symlink-install && source install/setup.bash'
+alias runzed='ros2 run arm_zed_camera_py_pkg zed_camera_node'
+
+###########################################################
+# ✍️ EDITING / CONFIGURATION
+###########################################################
+alias v='gvim "$@"'                  # open files with gVim
+alias settings='gvim ~/.bashrc'      # open bashrc directly
+alias bashrc='gvim ~/.bashrc'
+alias aliases='gvim ~/.bash_aliases'
+alias reload='source ~/.bashrc && echo "Bash configuration reloaded ✅"'
+alias eal='v ~/.bashrc'
+alias sal='source ~/.bashrc'
+
+###########################################################
+# 🏗️ OPTIONAL BUILD SHORTCUTS (commented out)
+###########################################################
+# alias build='colcon build --packages-select arm_zed_camera_py_pkg --symlink-install && source install/setup.bash'
+# alias full_build='colcon build --packages-select arm_zed_camera_py_pkg --cmake-clean-cache --symlink-install --event-handlers console_direct+'
+
+
+
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+##colcon build --packages-select arm_zed_camera_py_pkg --cmake-clean-cache --symlink-install --event-handlers console_direct+
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+[ -f /opt/ros/humble/setup.bash ] && source /opt/ros/humble/setup.bash
+[ -f ~/ros2_ws/install/setup.bash ] && source ~/ros2_ws/install/setup.bash
+[ -f /home/arm2025/ros2_ws/install/local_setup.bash ] && source /home/arm2025/ros2_ws/install/local_setup.bash
+
+
+setup_slcan() {
+    # Find the first ttyACM device
+    local dev
+    dev=$(ls /dev/ttyACM* 2>/dev/null | head -n1)
+
+    if [ -z "$dev" ]; then
+        echo "No /dev/ttyACM* device found."
+        return 1
+    fi
+
+    echo "Using device: $dev"
+
+    # Run slcand
+    sudo slcand -o -c -s8 "$dev" slcan0
+    if [ $? -ne 0 ]; then
+        echo "Failed to start slcand."
+        return 1
+    fi
+
+    # Bring interface up
+    sudo ip link set slcan0 up
+    if [ $? -ne 0 ]; then
+        echo "Failed to bring slcan0 up."
+        return 1
+    fi
+
+    echo "slcan0 setup successfully!"
+}
+

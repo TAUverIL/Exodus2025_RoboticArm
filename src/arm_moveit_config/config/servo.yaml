@@ -1,39 +1,20 @@
-servo_node:
-  ros__parameters:
-    # --- MoveIt Properties ---
-    move_group_name: arm
-    planning_frame: base_link
-    ee_frame_name: End_effector
-    robot_link_command_frame: base_link
-    
-    # --- Incoming Commands ---
-    command_in_type: "unitless" # REQUIRED for joystick input (-1.0 to 1.0)
-    cartesian_command_in_topic: /servo_twist
-    incoming_command_timeout: 0.5
-    
-    # --- Outgoing Commands ---
-    command_out_topic: /arm_controller/joint_trajectory
-    command_out_type: trajectory_msgs/JointTrajectory
-    publish_period: 0.04
-    
-    # --- Scaling (Speed) ---
-    scale_linear: 0.4
-    scale_rotational: 0.2
-    
-    # --- Collision Checking (Safety) ---
-    check_collisions: true
-    collision_check_rate: 10.0
-    self_collision_proximity_threshold: 0.01
-    scene_collision_proximity_threshold: 0.02
-    
-    # --- Joint Velocity Limits (Safety) ---
-    joint_velocity_limits:
-      Joint1: 1.0
-      Joint2: 1.0
-      Joint3: 1.0
-      Joint4: 1.0
-      Joint5: 1.0
+moveit_servo:
+  # Topics
+  cartesian_command_in_topic: ~/delta_twist_cmds  # Topic where we send TwistStamped
+  joint_command_in_topic: ~/delta_joint_cmds
+  joint_topic: /joint_states
+  status_topic: ~/status
+  command_out_topic: /arm_controller/joint_trajectory # Must match your controller's topic
 
-    # --- Other ---
-    use_gazebo: false
-    status_topic: status
+  # Config
+  move_group_name: arm         # defined in your SRDF
+  planning_frame: base_link    # The fixed frame of your robot
+  ee_frame_name: link5         # The tip link of your robot
+  robot_link_command_frame: base_link
+
+  # Tuning - Adjust these for your hardware speed
+  linear_scale: 0.4            # Max linear velocity (m/s)
+  rotational_scale: 0.8        # Max angular velocity (rad/s)
+  publish_period: 0.033        # ~30Hz
+  low_pass_filter_coeff: 2.0   # Smoothing
+  incoming_command_timeout: 0.1 # Stop if joystick stops

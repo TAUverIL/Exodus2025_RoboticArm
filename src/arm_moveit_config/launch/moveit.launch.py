@@ -1,24 +1,27 @@
 """
 Launch file for MoveIt2 with the Exodus2025 robotic arm
 """
+import os
+import yaml
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, RegisterEventHandler
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, Command, FindExecutable
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.parameter_descriptions import ParameterValue
-import os
-import yaml
-from ament_index_python.packages import get_package_share_directory
 from launch.conditions import IfCondition
 from launch.event_handlers import OnProcessExit
+from ament_index_python.packages import get_package_share_directory
 
 
 def load_yaml(package_name: str, relative_path: str):
     pkg_share = get_package_share_directory(package_name)
     file_path = os.path.join(pkg_share, relative_path)
-    with open(file_path, "r") as f:
-        return yaml.safe_load(f)
+    try:
+        with open(file_path, "r") as f:
+            return yaml.safe_load(f)
+    except EnvironmentError:
+        return None
 
 def generate_launch_description():
     # Declare arguments
@@ -253,6 +256,55 @@ def generate_launch_description():
     # Get parameters for the Servo node
     servo_yaml_content = load_yaml("arm_moveit_config", "config/servo.yaml")
     
+    if 'servo_node' in servo_yaml_content and 'ros__parameters' in servo_yaml_content['servo_node']:
+        servo_params_flat = servo_yaml_content['servo_node']['ros__parameters']
+    else:
+        servo_params_flat = servo_yaml_content
+
+    servo_params = {"moveit_servo": servo_params_flat}
+    
+    # MoveIt Servo Node
+    servo_node = Node(
+        package="moveit_servo",
+        executable="servo_node_main",
+        parameters=[
+            servo_params,
+            robot_description,
+            robot_description_semantic,
+            robot_description_kinematics,
+        ],
+        output="screen",
+        condition=IfCondition(use_servo),
+    )
+
+    # Joy Node
+    joy_node = Node(
+        package="joy",
+        executable="joy_node",
+        name="joy_node",
+        output="screen",
+        condition=IfCondition(use_servo),
+    )
+
+    # Teleop Twist Joy Node
+    xbox_config_file = PathJoinSubstitution(
+        [FindPackageShare("arm_moveit_config"), "config", "xbox_teleop.yaml"]
+    )
+
+    teleop_twist_joy_node = Node(
+        package="teleop_twist_joy",
+        executable="teleop_node",
+        name="teleop_twist_joy_node",
+        output="screen",
+        parameters=[
+            xbox_config_file, 
+            {"publish_stamped_twist": True},
+            {"frame": "base_link"},
+        ],
+        remappings=[("/cmd_vel", "/servo_twist")],
+        condition=IfCondition(use_servo),
+    )
+    
     # Check if the yaml is nested under servo_node/ros__parameters (typical for param dumps)
     # or if it is flat. We need the flat parameters for the node definition.
     if 'servo_node' in servo_yaml_content and 'ros__parameters' in servo_yaml_content['servo_node']:
@@ -305,19 +357,6 @@ def generate_launch_description():
         remappings=[("/cmd_vel", "/servo_twist")],
         condition=IfCondition(use_servo),
     )
-    
-    # MoveIt Servo node
-    # servo_node = Node(
-    #     package="moveit_servo",
-    #     executable="servo_node_main",
-    #     parameters=[
-    #         servo_params,
-    #         moveit_config.robot_description,
-    #         moveit_config.robot_description_semantic,
-    #         moveit_config.robot_description_kinematics,
-    #     ],
-    #     output="screen",
-    # )
 
 
     # ros2_control node (if using fake hardware, this will be important)

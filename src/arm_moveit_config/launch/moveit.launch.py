@@ -226,14 +226,14 @@ def generate_launch_description():
         ],
     )
 
-    # Joint State Publisher (publishes /joint_states for MoveIt and robot_state_publisher)
-    joint_state_publisher = Node(
-       package="joint_state_publisher",
-       executable="joint_state_publisher",
-       name="joint_state_publisher",
-       output="screen",
-       condition=IfCondition(use_fake_hardware),
-    )
+    # # Joint State Publisher (publishes /joint_states for MoveIt and robot_state_publisher)
+    # joint_state_publisher = Node(
+    #    package="joint_state_publisher",
+    #    executable="joint_state_publisher",
+    #    name="joint_state_publisher",
+    #    output="screen",
+    #    condition=IfCondition(use_fake_hardware),
+    # )
 
     # Robot State Publisher
     robot_state_publisher = Node(
@@ -300,6 +300,11 @@ def generate_launch_description():
             xbox_config_file, 
             {"publish_stamped_twist": True},
             {"frame": "base_link"},
+
+            {"axis_linear.x": 1},   # Left Stick Vertical
+            {"axis_angular.yaw": 3},# Right Stick Horizontal
+            {"enable_button": 5},   # Force Button 5 (RB) as Enable
+            {"require_enable_button": False}, # DISABLE the safety switch for testing
         ],
         remappings=[("cmd_vel", "/servo_node/delta_twist_cmds")],
         condition=IfCondition(use_servo),
@@ -349,12 +354,16 @@ def generate_launch_description():
         executable="teleop_node",
         name="teleop_twist_joy_node",
         output="screen",
-        parameters=[
-            xbox_config_file, 
-            {"publish_stamped_twist": True},
-            {"frame": "base_link"},
-        ],
-        remappings=[("/cmd_vel", "/servo_twist")],
+        parameters=[{
+            "publish_stamped_twist": True,   # Forces correct message type for Servo
+            "require_enable_button": False,  # Disables the deadman switch
+            "axis_linear.x": 1,              # Matches your working setup
+            "scale_linear.x": 0.4,
+            "axis_angular.yaw": 3,           # Matches your working setup
+            "scale_angular.yaw": 0.4,
+            "frame": "base_link",            # Required for TwistStamped
+        }],
+        remappings=[("cmd_vel", "/cmd_vel")],
         condition=IfCondition(use_servo),
     )
 
@@ -366,7 +375,7 @@ def generate_launch_description():
         ros2_control_node,
         joint_state_broadcaster_spawner,
         delay_arm_controller_after_jsb,
-        joint_state_publisher,
+        # joint_state_publisher,
         robot_state_publisher,
         run_move_group_node,
         rviz_node,

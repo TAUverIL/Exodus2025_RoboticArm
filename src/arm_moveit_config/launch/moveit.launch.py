@@ -301,7 +301,7 @@ def generate_launch_description():
             {"publish_stamped_twist": True},
             {"frame": "base_link"},
         ],
-        remappings=[("/cmd_vel", "/servo_twist")],
+        remappings=[("cmd_vel", "/servo_node/delta_twist_cmds")],
         condition=IfCondition(use_servo),
     )
     

@@ -7,7 +7,7 @@ from std_msgs.msg import String
 from geometry_msgs.msg import Point
 from cv_bridge import CvBridge
 from ultralytics import YOLO
-from arm_zed_camera_py_pkg.orange_detector import detect_orange_objects
+#from arm_zed_camera_py_pkg.orange_detector import detect_orange_objects
 from arm_zed_camera_py_pkg.ArucoDetector import aruco_detection
 from rclpy.logging import get_logger
 
@@ -23,6 +23,14 @@ class ZEDCameraNode(Node):
         init_params = sl.InitParameters()
         init_params.depth_mode = sl.DEPTH_MODE.PERFORMANCE #changed from NEURAL to PERFORMANCE  # Updated per ZED warning for better depth
         init_params.coordinate_units = sl.UNIT.METER
+
+        # Omri Added in Dec 2025 - to try to get 60fps
+        init_params = sl.InitParameters()
+        init_params.camera_resolution = sl.RESOLUTION.HD720  # Required for 60fps
+        init_params.camera_fps = 30                          # Set target FPS
+        init_params.depth_mode = sl.DEPTH_MODE.PERFORMANCE   # Faster than NEURAL
+        init_params.coordinate_units = sl.UNIT.METER
+        init_params.depth_stabilization = 0
 
 
 
@@ -135,8 +143,8 @@ class ZEDCameraNode(Node):
 
             # Detect orange objects
             # left_rgb, orange_boxes = detect_orange_objects(left_rgb)
-            image, boxes, mask = detect_orange_objects(left_rgb)
-            cv2.imshow("Orange Mask", mask)
+            #image, boxes, mask = detect_orange_objects(left_rgb)
+            #cv2.imshow("Orange Mask", mask)
             #cv2.waitKey(1) #tomer commanted out
 
             #self.get_logger().info("[orange_detector] Detected orange object") #commanted out, as it was too laggy

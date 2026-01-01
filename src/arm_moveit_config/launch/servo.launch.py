@@ -1,43 +1,75 @@
 import os
+import yaml
 from launch import LaunchDescription
 from launch_ros.actions import Node
+from launch.actions import ExecuteProcess
+from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
 from launch_ros.substitutions import FindPackageShare
-from launch.substitutions import PathJoinSubstitution
-import yaml
+from launch.actions import DeclareLaunchArgument
+from ament_index_python.packages import get_package_share_directory
 
 def load_yaml(package_name, file_path):
-    package_path = FindPackageShare(package_name).find(package_name)
-    absolute_file_path = os.path.join(package_path, file_path)
     try:
+        package_path = get_package_share_directory(package_name)
+        absolute_file_path = os.path.join(package_path, file_path)
         with open(absolute_file_path, 'r') as file:
             return yaml.safe_load(file)
     except EnvironmentError:
         return None
+    
+def load_file(package_name, file_path):
+    try:
+        package_path = get_package_share_directory(package_name)
+        absolute_file_path = os.path.join(package_path, file_path)
+        with open(absolute_file_path, "r") as file:
+            return file.read()
+    except EnvironmentError: 
+        return None
 
 def generate_launch_description():
-    # 1. Load Servo Configuration
+    # 1. Get Robot Description (URDF)
+    robot_description_content = Command(
+        [
+            PathJoinSubstitution([FindExecutable(name="xacro")]),
+            " ",
+            PathJoinSubstitution(
+                [FindPackageShare("arm_description"), "urdf", "arm.urdf.xacro"]
+            ),
+            " ",
+            "use_fake_hardware:=true", 
+        ]
+    )
+    robot_description = {"robot_description": robot_description_content}
+
+    # 2. Get Robot Semantic Description (SRDF)
+    robot_description_semantic_config = load_file(
+        "arm_moveit_config", "config/Arm_MoveIt_Assembly.SLDASM.srdf"
+    )
+    robot_description_semantic = {
+        "robot_description_semantic": robot_description_semantic_config
+    }
+
+    # 3. Get Kinematics Config (NEW!)
+    kinematics_yaml = load_yaml("arm_moveit_config", "config/kinematics.yaml")
+
+    # 4. Get Servo Configuration
     servo_yaml = load_yaml("arm_moveit_config", "config/servo.yaml")
     servo_params = {"moveit_servo": servo_yaml}
 
-    # 2. Get Robot Description (URDF & SRDF)
-    # Note: We reuse the logic from your moveit.launch.py or load strictly here
-    # For simplicity, assuming robot_description is available or loaded via xacro here:
-    # (You may need to copy the robot_description loading logic from your moveit.launch.py 
-    # if this file is run standalone)
-
-    # 3. Servo Node (The core servoing logic)
+    # 5. Servo Node 
     servo_node = Node(
         package="moveit_servo",
         executable="servo_node_main",
         parameters=[
             servo_params,
-            # NOTE: You must pass robot_description and semantic here if running standalone
-            # If running included in moveit.launch.py, ensure these are passed down
+            robot_description,
+            robot_description_semantic,
+            kinematics_yaml, # <--- Added this line
         ],
         output="screen",
     )
 
-    # 4. Joy Node (Reads the physical Xbox controller)
+    # 6. Joy Node
     joy_node = Node(
         package="joy",
         executable="joy_node",
@@ -45,24 +77,13 @@ def generate_launch_description():
         output="screen",
     )
 
-    # 5. Teleop Twist Joy (Converts Xbox buttons to TwistStamped)
-    # We remap the output to the topic Servo listens to
+    # 7. Teleop Twist Joy
+    joy_config = load_yaml("arm_moveit_config", "config/xbox_teleop.yaml")
     joy_teleop_node = Node(
         package="teleop_twist_joy",
         executable="teleop_node",
         name="joy_teleop",
-        parameters=[{
-            "publish_stamped_twist": True, # Servo needs TwistStamped, not Twist
-            "axis_linear.x": 1,            # Left stick vertical
-            "axis_linear.y": 0,            # Left stick horizontal
-            "axis_angular.yaw": 3,         # Right stick horizontal
-            "scale_linear.x": 0.5,
-            "scale_linear.y": 0.5,
-            "scale_angular.yaw": 0.5,
-            "enable_button": 5,            # RB button (usually) to enable movement
-            "require_enable_button": True,
-            "frame": "base_link",          # Frame the commands are given in
-        }],
+        parameters=[joy_config],
         remappings=[
             ("/cmd_vel", "/servo_node/delta_twist_cmds"),
         ],

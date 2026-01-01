@@ -1,5 +1,5 @@
 # Topics
-cartesian_command_in_topic: /cmd_vel
+cartesian_command_in_topic: /servo_node/delta_twist_cmds
 joint_command_in_topic: ~/delta_joint_cmds
 joint_topic: /joint_states
 status_topic: ~/status

@@ -8,7 +8,7 @@ command_out_topic: /arm_controller/joint_trajectory
 # Config
 move_group_name: arm
 planning_frame: base_link
-ee_frame_name: link5
+ee_frame_name: End_effector
 robot_link_command_frame: base_link
 
 # Tuning

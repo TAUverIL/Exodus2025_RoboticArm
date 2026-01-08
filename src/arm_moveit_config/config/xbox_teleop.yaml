@@ -29,4 +29,4 @@ teleop_node:
     # Button 5 is usually 'RB' (Right Bumper). 
     # You MUST hold this to move.
     enable_button: 5
-    require_enable_button: true
+    require_enable_button: false

@@ -380,9 +380,9 @@ def generate_launch_description():
         run_move_group_node,
         rviz_node,
         static_tf_world_to_base,
-        servo_node,
-        joy_node,
-        teleop_twist_joy_node,
+        # servo_node,
+        # joy_node,
+        # teleop_twist_joy_node,
     ]
 
     return LaunchDescription(declared_arguments + nodes_to_start)

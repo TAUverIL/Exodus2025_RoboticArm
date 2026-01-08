@@ -1,33 +1,14 @@
 import os
-import yaml
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.actions import ExecuteProcess
-from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
+from launch.substitutions import Command, FindExecutable, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
-from launch.actions import DeclareLaunchArgument
-from ament_index_python.packages import get_package_share_directory
-
-def load_yaml(package_name, file_path):
-    try:
-        package_path = get_package_share_directory(package_name)
-        absolute_file_path = os.path.join(package_path, file_path)
-        with open(absolute_file_path, 'r') as file:
-            return yaml.safe_load(file)
-    except EnvironmentError:
-        return None
-    
-def load_file(package_name, file_path):
-    try:
-        package_path = get_package_share_directory(package_name)
-        absolute_file_path = os.path.join(package_path, file_path)
-        with open(absolute_file_path, "r") as file:
-            return file.read()
-    except EnvironmentError: 
-        return None
+from launch_ros.parameter_descriptions import ParameterValue
 
 def generate_launch_description():
-    # 1. Get Robot Description (URDF)
+
+    # 1. Get Robot Description (URDF) - Needed for Collision Checking
     robot_description_content = Command(
         [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
@@ -39,59 +20,49 @@ def generate_launch_description():
             "use_fake_hardware:=true", 
         ]
     )
-    robot_description = {"robot_description": robot_description_content}
+    robot_description = {"robot_description": ParameterValue(robot_description_content, value_type=str)}
 
-    # 2. Get Robot Semantic Description (SRDF)
-    robot_description_semantic_config = load_file(
-        "arm_moveit_config", "config/Arm_MoveIt_Assembly.SLDASM.srdf"
+    # 2. Get SRDF - Needed for Move Groups
+    srdf_content = Command(
+        [
+            PathJoinSubstitution([FindExecutable(name="cat")]), 
+            " ",
+            PathJoinSubstitution([FindPackageShare("arm_moveit_config"), "config", "Arm_MoveIt_Assembly.SLDASM.srdf"])
+        ]
     )
-    robot_description_semantic = {
-        "robot_description_semantic": robot_description_semantic_config
-    }
+    robot_description_semantic = {"robot_description_semantic": ParameterValue(srdf_content, value_type=str)}
 
-    # 3. Get Kinematics Config (NEW!)
-    kinematics_yaml = load_yaml("arm_moveit_config", "config/kinematics.yaml")
-
-    # 4. Get Servo Configuration
-    servo_yaml = load_yaml("arm_moveit_config", "config/servo.yaml")
-    servo_params = {"moveit_servo": servo_yaml}
-
-    # 5. Servo Node 
+    # 3. YOUR NEW CUSTOM NODE
     servo_node = Node(
-        package="moveit_servo",
-        executable="servo_node_main",
+        package="arm_moveit_config",
+        executable="servo_node",       # Runs your new C++ binary
+        name="servo_node",
         parameters=[
-            servo_params,
-            robot_description,
-            robot_description_semantic,
-            kinematics_yaml, # <--- Added this line
+            robot_description,         # Pass URDF
+            robot_description_semantic # Pass SRDF
         ],
         output="screen",
     )
 
-    # 6. Joy Node
+    # 4. Joy Driver
     joy_node = Node(
         package="joy",
         executable="joy_node",
         name="joy_node",
-        output="screen",
+        parameters=[{"deadzone": 0.05, "autorepeat_rate": 20.0}]
     )
 
-    # 7. Teleop Twist Joy
-    joy_config = load_yaml("arm_moveit_config", "config/xbox_teleop.yaml")
-    joy_teleop_node = Node(
-        package="teleop_twist_joy",
-        executable="teleop_node",
-        name="joy_teleop",
-        parameters=[joy_config],
-        remappings=[
-            ("/cmd_vel", "/servo_node/delta_twist_cmds"),
-        ],
+    # 5. Bridge Script
+    # (Assuming the script is in src/arm_moveit_config/scripts/joy_to_servo.py)
+    joy_to_servo_node = Node(
+        package="arm_moveit_config",
+        executable="joy_to_servo.py",
+        name="joy_to_servo_node",
         output="screen",
     )
 
     return LaunchDescription([
         servo_node,
         joy_node,
-        joy_teleop_node,
+        joy_to_servo_node, 
     ])

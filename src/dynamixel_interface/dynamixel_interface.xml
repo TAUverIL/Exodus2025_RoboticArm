@@ -1,0 +1,7 @@
+<library path="dynamixel_interface">
+  <class name="dynamixel_interface/DynamixelSystem" type="dynamixel_interface::DynamixelSystem" base_class_type="hardware_interface::SystemInterface">
+    <description>
+      Hardware interface for Dynamixel motors using the official SDK.
+    </description>
+  </class>
+</library>

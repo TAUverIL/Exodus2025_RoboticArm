@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="dynamixel_test_robot">
+
+  <link name="world"/>
+  <link name="link1">
+    <inertial>
+      <mass value="0.1"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+    </inertial>
+  </link>
+
+  <joint name="joint1" type="revolute">
+    <parent link="world"/>
+    <child link="link1"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-3.14" upper="3.14" effort="10.0" velocity="5.0"/>
+  </joint>
+
+  <ros2_control name="DynamixelSystem" type="system">
+    <hardware>
+      <plugin>dynamixel_interface/DynamixelSystem</plugin>
+      <param name="device_name">/dev/ttyUSB0</param>
+      <param name="baud_rate">57600</param>
+    </hardware>
+
+    <joint name="joint1">
+      <param name="id">1</param> <command_interface name="position"/>
+      <state_interface name="position"/>
+    </joint>
+  </ros2_control>
+
+</robot>

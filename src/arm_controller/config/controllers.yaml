@@ -1,14 +1,19 @@
 controller_manager:
   ros__parameters:
-    update_rate: 50  # Hz, must not be higher than motor status rate
+    update_rate: 50
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-    # Controller used by MoveIt (exposes FollowJointTrajectory action on arm_controller/follow_joint_trajectory)
+    # Main arm controller (for MoveIt)
     arm_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
+    # TEST CONTROLLER (This was missing!)
+    forward_position_controller:
+      type: forward_command_controller/ForwardCommandController
+
+# Config for main arm
 arm_controller:
   ros__parameters:
     joints:
@@ -22,3 +27,10 @@ arm_controller:
     state_interfaces:
       - position
       - velocity
+
+# Config for test controller
+forward_position_controller:
+  ros__parameters:
+    joints:
+      - joint1
+    interface_name: position

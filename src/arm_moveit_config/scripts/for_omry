@@ -1,0 +1,168 @@
+#!/usr/bin/env python3
+import rclpy
+from rclpy.node import Node
+from sensor_msgs.msg import Joy
+from geometry_msgs.msg import TwistStamped
+from control_msgs.msg import JointJog
+from std_srvs.srv import Trigger
+
+# --- CONFIGURATION ---
+# Xbox Controller Map
+AXIS_LEFT_X = 0
+AXIS_LEFT_Y = 1
+AXIS_LT = 2
+AXIS_RIGHT_X = 3
+AXIS_RIGHT_Y = 4
+AXIS_RT = 5
+AXIS_DPAD_X = 6
+AXIS_DPAD_Y = 7
+
+BTN_A = 0
+BTN_B = 1
+BTN_X = 2
+BTN_Y = 3
+BTN_LB = 4
+BTN_RB = 5
+BTN_BACK = 6  # Change View
+BTN_START = 7 # Menu
+BTN_POWER = 8
+BTN_STICK_LEFT = 9
+BTN_STICK_RIGHT = 10
+
+# Robot Config
+BASE_FRAME_ID = 'base_link'
+EE_FRAME_ID = 'End_effector' 
+
+class JoyToServo(Node):
+    def __init__(self):
+        super().__init__('joy_to_servo_node')
+        
+        # State
+        self.frame_to_publish = BASE_FRAME_ID
+        self.enable_button = BTN_RB
+        
+        # Publishers
+        self.twist_pub = self.create_publisher(TwistStamped, '/servo_node/delta_twist_cmds', 10)
+        self.joint_pub = self.create_publisher(JointJog, '/servo_node/delta_joint_cmds', 10)
+        
+        # Subscriber
+        self.joy_sub = self.create_subscription(Joy, '/joy', self.joy_callback, 10)
+        
+        # Service Client (Optional: Starts Servo Node if needed, similar to C++ example)
+        self.servo_start_client = self.create_client(Trigger, '/servo_node/start_servo')
+        # We don't wait for service here to avoid blocking init if already running
+        
+        self.get_logger().info("JoyToServo Bridge Initialized.")
+        self.get_logger().info(f"Default Frame: {self.frame_to_publish}")
+
+    def update_cmd_frame(self, buttons):
+        """ Checks if frame switching buttons are pressed """
+        if buttons[BTN_BACK] and self.frame_to_publish == EE_FRAME_ID:
+            self.frame_to_publish = BASE_FRAME_ID
+            self.get_logger().info(f"Switched to BASE frame: {BASE_FRAME_ID}")
+        elif buttons[BTN_START] and self.frame_to_publish == BASE_FRAME_ID:
+            self.frame_to_publish = EE_FRAME_ID
+            self.get_logger().info(f"Switched to EE frame: {EE_FRAME_ID}")
+
+    def joy_callback(self, msg):
+        # Safety: Deadman switch
+        if not msg.buttons[self.enable_button]:
+            return
+
+        timestamp = self.get_clock().now().to_msg()
+        self.update_cmd_frame(msg.buttons)
+
+        # --- MODE SELECTION: JOINT JOG vs TWIST ---
+        # If any Joint Jog buttons are pressed, we prioritized Joint Jog (like the C++ example)
+        # We use A/B/X/Y and D-Pad for joints.
+        is_joint_jog_active = (
+            msg.buttons[BTN_A] or msg.buttons[BTN_B] or 
+            msg.buttons[BTN_X] or msg.buttons[BTN_Y] or 
+            abs(msg.axes[AXIS_DPAD_X]) > 0.1 or abs(msg.axes[AXIS_DPAD_Y]) > 0.1
+        )
+
+        if is_joint_jog_active:
+            joint_msg = JointJog()
+            joint_msg.header.stamp = timestamp
+            joint_msg.header.frame_id = BASE_FRAME_ID # Joints are always relative to robot
+            
+            # Map D-Pad to Proximal Joints (1 & 2)
+            # D-Pad X -> Joint 1
+            if abs(msg.axes[AXIS_DPAD_X]) > 0.1:
+                joint_msg.joint_names.append('Joint1')
+                joint_msg.velocities.append(msg.axes[AXIS_DPAD_X] * 1.0)
+            
+            # D-Pad Y -> Joint 2
+            if abs(msg.axes[AXIS_DPAD_Y]) > 0.1:
+                joint_msg.joint_names.append('Joint2')
+                joint_msg.velocities.append(msg.axes[AXIS_DPAD_Y] * 1.0)
+
+            # Map Face Buttons to Distal Joints (4 & 5)
+            # Buttons Y/A -> Joint 4 (Up/Down)
+            vel_j4 = 0.0
+            if msg.buttons[BTN_Y]: vel_j4 += 1.0
+            if msg.buttons[BTN_A]: vel_j4 -= 1.0
+            
+            if vel_j4 != 0.0:
+                joint_msg.joint_names.append('Joint4')
+                joint_msg.velocities.append(vel_j4)
+
+            # Buttons B/X -> Joint 5 (Left/Right or Roll)
+            vel_j5 = 0.0
+            if msg.buttons[BTN_B]: vel_j5 += 1.0
+            if msg.buttons[BTN_X]: vel_j5 -= 1.0
+            
+            if vel_j5 != 0.0:
+                joint_msg.joint_names.append('Joint5')
+                joint_msg.velocities.append(vel_j5)
+
+            # Publish Joint Command
+            self.joint_pub.publish(joint_msg)
+
+        else:
+            # --- TWIST CONTROL (Cartesian) ---
+            twist = TwistStamped()
+            twist.header.stamp = timestamp
+            twist.header.frame_id = self.frame_to_publish
+            
+            # Scales
+            LINEAR_SCALE = 1.0
+            ANGULAR_SCALE = 1.0
+
+            # Linear X/Y (Left Stick)
+            twist.twist.linear.x = msg.axes[AXIS_LEFT_Y] * LINEAR_SCALE
+            twist.twist.linear.y = msg.axes[AXIS_LEFT_X] * LINEAR_SCALE
+            
+            # Linear Z (Triggers)
+            # Map 1.0 (unpressed) -> -1.0 (pressed) range to 0.0 -> 1.0
+            val_lt = (1.0 - msg.axes[AXIS_LT]) / 2.0
+            val_rt = (1.0 - msg.axes[AXIS_RT]) / 2.0
+            twist.twist.linear.z = (val_rt - val_lt) * LINEAR_SCALE
+
+            # Angular (Right Stick)
+            twist.twist.angular.y = msg.axes[AXIS_RIGHT_Y] * ANGULAR_SCALE # Pitch
+            twist.twist.angular.z = msg.axes[AXIS_RIGHT_X] * ANGULAR_SCALE # Yaw
+            
+            # Angular Roll (Bumpers - C++ example uses these for Z-rotation, we use for Roll)
+            # Since RB is enable, we might need another button for Roll or just rely on Joint 5 jog
+            # Adding Roll on LB if needed, or Stick Click
+            if msg.buttons[BTN_LB]:
+                twist.twist.angular.x = -1.0 * ANGULAR_SCALE
+            elif msg.buttons[BTN_STICK_RIGHT]:
+                twist.twist.angular.x = 1.0 * ANGULAR_SCALE
+
+            self.twist_pub.publish(twist)
+
+def main(args=None):
+    rclpy.init(args=args)
+    node = JoyToServo()
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()

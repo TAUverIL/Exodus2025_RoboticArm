@@ -5,7 +5,6 @@ from launch_ros.actions import Node
 import xacro
 
 def generate_launch_description():
-    # 1. Get Paths
     pkg_path = get_package_share_directory("arm_controller")
     
     # 2. Parse URDF
@@ -33,14 +32,23 @@ def generate_launch_description():
         output="both",
     )
 
-    node_spawner = Node(
+    # Spawns the controller that LISTENS to commands
+    node_spawner_forward = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["forward_position_controller", "--controller-manager", "/controller_manager"],
     )
 
+    # Spawns the controller that PUBLISHES states (Fixes your empty topic!)
+    node_spawner_broadcaster = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
+    )
+
     return LaunchDescription([
         node_robot_state_publisher,
         node_ros2_control,
-        node_spawner,
+        node_spawner_forward,
+        node_spawner_broadcaster,
     ])

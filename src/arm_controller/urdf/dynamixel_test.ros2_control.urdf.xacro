@@ -25,7 +25,8 @@
     </hardware>
 
     <joint name="joint1">
-      <param name="id">1</param> <command_interface name="position"/>
+      <param name="id">1</param> 
+      <command_interface name="position"/>
       <state_interface name="position"/>
     </joint>
   </ros2_control>

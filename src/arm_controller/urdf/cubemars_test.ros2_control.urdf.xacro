@@ -33,7 +33,7 @@
       <param name="vel_limit">12.0</param>
       <param name="acc_limit">3.0</param>
       <param name="enc_off">0.0</param>
-      <param name="read_only">0</param>
+      <param name="read_only">0</param> 
       <command_interface name="position"/>
       <state_interface name="position"/>
       <state_interface name="velocity"/>

@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="test_robot">
+  <xacro:include filename="/home/arm2025/arm_wa01/Exodus2025_RoboticArm/src/arm_description/urdf/AssemblyURDF_27.04.26.urdf"/>
+</robot>

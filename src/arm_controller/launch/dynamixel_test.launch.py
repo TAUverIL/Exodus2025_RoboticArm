@@ -36,7 +36,7 @@ def generate_launch_description():
     node_spawner_forward = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["forward_position_controller", "--controller-manager", "/controller_manager"],
+        arguments=["gripper_controller", "--controller-manager", "/controller_manager"],
     )
 
     # Spawns the controller that PUBLISHES states (Fixes your empty topic!)

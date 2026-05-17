@@ -9,6 +9,10 @@ controller_manager:
     arm_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
+    # Gripper controller
+    gripper_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
     # TEST CONTROLLER (This was missing!)
     forward_position_controller:
       type: forward_command_controller/ForwardCommandController
@@ -17,11 +21,22 @@ controller_manager:
 arm_controller:
   ros__parameters:
     joints:
-      - Joint1
-      - Joint2
-      - Joint3
-      - Joint4
-      - Joint5
+      - Joint_1
+      - Joint_2
+      - Joint_3
+      - Joint_4
+      - Joint_5
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+
+# Config for gripper
+gripper_controller:
+  ros__parameters:
+    joints:
+      - Finger_Left_Joint
     command_interfaces:
       - position
     state_interfaces:
@@ -32,5 +47,5 @@ arm_controller:
 forward_position_controller:
   ros__parameters:
     joints:
-      - joint1
+      - Joint_1
     interface_name: position

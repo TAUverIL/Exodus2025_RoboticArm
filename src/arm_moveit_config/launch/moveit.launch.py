@@ -3,7 +3,7 @@ Launch file for MoveIt2 with the Exodus2025 robotic arm
 """
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, RegisterEventHandler
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, Command, FindExecutable
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, Command, FindExecutable, PythonExpression
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.parameter_descriptions import ParameterValue
@@ -52,12 +52,28 @@ def generate_launch_description():
             description="Launch ros2_control (controller_manager + controllers) for the MoveIt robot model",
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "can_interface",
+            default_value="slcan0",
+            description="CAN interface name (e.g., can0, slcan0). Only used with real hardware.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "use_gripper",
+            default_value="false",
+            description="Include and start the Dynamixel gripper hardware/controller.",
+        )
+    )
 
     # Initialize arguments
     use_fake_hardware = LaunchConfiguration("use_fake_hardware")
     launch_internal_joint_state_publisher = LaunchConfiguration("launch_internal_joint_state_publisher")
     launch_internal_robot_state_publisher = LaunchConfiguration("launch_internal_robot_state_publisher")
     launch_ros2_control = LaunchConfiguration("launch_ros2_control")
+    can_interface = LaunchConfiguration("can_interface")
+    use_gripper = LaunchConfiguration("use_gripper")
 
     # Planning context
     robot_description_content = Command(
@@ -69,6 +85,10 @@ def generate_launch_description():
             ),
             " use_fake_hardware:=",
             use_fake_hardware,
+            " can_interface:=",
+            can_interface,
+            " use_gripper:=",
+            use_gripper,
         ]
     )
     robot_description = {"robot_description": ParameterValue(robot_description_content, value_type=str)}
@@ -172,10 +192,17 @@ def generate_launch_description():
         condition=IfCondition(launch_ros2_control),
     )
 
+    gripper_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["gripper_controller", "--controller-manager", "/controller_manager"],
+        condition=IfCondition(PythonExpression(["'", launch_ros2_control, "' == 'true' and '", use_gripper, "' == 'true'"])),
+    )
+
     delay_arm_controller_after_jsb = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=joint_state_broadcaster_spawner,
-            on_exit=[arm_controller_spawner],
+            on_exit=[arm_controller_spawner, gripper_controller_spawner],
         )
     )
 
@@ -280,4 +307,3 @@ def generate_launch_description():
     ]
 
     return LaunchDescription(declared_arguments + nodes_to_start)
-

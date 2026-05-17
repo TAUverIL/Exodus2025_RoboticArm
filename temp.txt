@@ -1,0 +1,232 @@
+[INFO] [launch]: All log files can be found below /home/arm2025/.ros/log/2026-01-07-21-56-28-319527-arm2025-desktop-16306
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [ros2_control_node-1]: process started with pid [16309]
+[INFO] [spawner-2]: process started with pid [16311]
+[INFO] [move_group-3]: process started with pid [16313]
+[INFO] [rviz2-4]: process started with pid [16315]
+[INFO] [static_transform_publisher-5]: process started with pid [16317]
+[static_transform_publisher-5] [WARN] [1767815788.835396224] []: Old-style arguments are deprecated; see --help for new-style arguments
+[static_transform_publisher-5] [INFO] [1767815788.883626328] [static_tf_world_to_base]: Spinning until stopped - publishing transform
+[static_transform_publisher-5] translation: ('0.000000', '0.000000', '0.000000')
+[static_transform_publisher-5] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-5] from 'world' to 'base_link'
+[move_group-3] [INFO] [1767815788.929485529] [moveit_rdf_loader.rdf_loader]: Loaded robot model in 0.00302482 seconds
+[move_group-3] [INFO] [1767815788.929632574] [moveit_robot_model.robot_model]: Loading robot model 'exodus_arm'...
+[ros2_control_node-1] [WARN] [1767815788.939556973] [controller_manager]: [Deprecated] Passing the robot description parameter directly to the control_manager node is deprecated. Use '~/robot_description' topic from 'robot_state_publisher' instead.
+[ros2_control_node-1] [INFO] [1767815788.940097537] [resource_manager]: Loading hardware 'ExodusArmSystem' 
+[ros2_control_node-1] [INFO] [1767815788.943978865] [resource_manager]: Initialize hardware 'ExodusArmSystem' 
+[ros2_control_node-1] [INFO] [1767815788.944584999] [FakeCubeMarsHardware]: Initializing fake hardware interface for 5 joints
+[ros2_control_node-1] [INFO] [1767815788.944741581] [resource_manager]: Successful initialization of hardware 'ExodusArmSystem'
+[ros2_control_node-1] [INFO] [1767815788.945048312] [resource_manager]: 'configure' hardware 'ExodusArmSystem' 
+[ros2_control_node-1] [INFO] [1767815788.945067257] [FakeCubeMarsHardware]: Configuring fake hardware
+[ros2_control_node-1] [INFO] [1767815788.945081338] [resource_manager]: Successful 'configure' of hardware 'ExodusArmSystem'
+[ros2_control_node-1] [INFO] [1767815788.945094746] [resource_manager]: 'activate' hardware 'ExodusArmSystem' 
+[ros2_control_node-1] [INFO] [1767815788.945101338] [FakeCubeMarsHardware]: Activating fake hardware
+[ros2_control_node-1] [INFO] [1767815788.945112635] [resource_manager]: Successful 'activate' of hardware 'ExodusArmSystem'
+[ros2_control_node-1] [INFO] [1767815789.284603495] [controller_manager]: update rate is 50 Hz
+[ros2_control_node-1] [INFO] [1767815789.284704459] [controller_manager]: Spawning controller_manager RT thread with scheduler priority: 50
+[ros2_control_node-1] [WARN] [1767815789.285010358] [controller_manager]: No real-time kernel detected on this system. See [https://control.ros.org/master/doc/ros2_control/controller_manager/doc/userdoc.html] for details on how to enable realtime scheduling.
+[spawner-2] [INFO] [1767815789.386411804] [spawner_joint_state_broadcaster]: waiting for service /controller_manager/list_controllers to become available...
+[ros2_control_node-1] [INFO] [1767815789.641120872] [controller_manager]: Loading controller 'joint_state_broadcaster'
+[spawner-2] [INFO] [1767815789.667439285] [spawner_joint_state_broadcaster]: [94mLoaded [1mjoint_state_broadcaster[0m
+[ros2_control_node-1] [INFO] [1767815789.670476421] [controller_manager]: Configuring controller 'joint_state_broadcaster'
+[ros2_control_node-1] [INFO] [1767815789.670716238] [joint_state_broadcaster]: 'joints' or 'interfaces' parameter is empty. All available state interfaces will be published
+[spawner-2] [INFO] [1767815789.727061362] [spawner_joint_state_broadcaster]: [92mConfigured and activated [1mjoint_state_broadcaster[0m
+[rviz2-4] [INFO] [1767815789.888411809] [rviz2]: Stereo is NOT SUPPORTED
+[rviz2-4] [INFO] [1767815789.888839377] [rviz2]: OpenGl version: 4.6 (GLSL 4.6)
+[move_group-3] [WARN] [1767815789.910073954] [kdl_parser]: The root link base_link has an inertia specified in the URDF, but KDL does not support a root link with an inertia.  As a workaround, you can add an extra dummy link to your URDF.
+[INFO] [spawner-2]: process has finished cleanly [pid 16311]
+[INFO] [spawner-6]: process started with pid [16381]
+[rviz2-4] [INFO] [1767815789.959725390] [rviz2]: Stereo is NOT SUPPORTED
+[rviz2-4] Warning: class_loader.impl: SEVERE WARNING!!! A namespace collision has occurred with plugin factory for class rviz_default_plugins::displays::InteractiveMarkerDisplay. New factory will OVERWRITE existing one. This situation occurs when libraries containing plugins are directly linked against an executable (the one running right now generating this message). Please separate plugins out into their own library or just don't link against the library and use either class_loader::ClassLoader/MultiLibraryClassLoader to open.
+[rviz2-4]          at line 253 in /opt/ros/humble/include/class_loader/class_loader/class_loader_core.hpp
+[spawner-6] [INFO] [1767815790.516248492] [spawner_arm_controller]: waiting for service /controller_manager/list_controllers to become available...
+[move_group-3] [INFO] [1767815792.237623882] [moveit_ros.planning_scene_monitor.planning_scene_monitor]: Publishing maintained planning scene on 'monitored_planning_scene'
+[move_group-3] [INFO] [1767815792.239181124] [moveit.ros_planning_interface.moveit_cpp]: Listening to 'joint_states' for joint states
+[move_group-3] [INFO] [1767815792.240359823] [moveit_ros.current_state_monitor]: Listening to joint states on topic 'joint_states'
+[move_group-3] [INFO] [1767815792.241098347] [moveit_ros.planning_scene_monitor.planning_scene_monitor]: Listening to '/attached_collision_object' for attached collision objects
+[move_group-3] [INFO] [1767815792.241136460] [moveit_ros.planning_scene_monitor.planning_scene_monitor]: Starting planning scene monitor
+[move_group-3] [INFO] [1767815792.241691104] [moveit_ros.planning_scene_monitor.planning_scene_monitor]: Listening to '/planning_scene'
+[move_group-3] [INFO] [1767815792.241721986] [moveit_ros.planning_scene_monitor.planning_scene_monitor]: Starting world geometry update monitor for collision objects, attached objects, octomap updates.
+[move_group-3] [INFO] [1767815792.242316119] [moveit_ros.planning_scene_monitor.planning_scene_monitor]: Listening to 'collision_object'
+[move_group-3] [INFO] [1767815792.242926606] [moveit_ros.planning_scene_monitor.planning_scene_monitor]: Listening to 'planning_scene_world' for planning scene world geometry
+[move_group-3] [WARN] [1767815792.243431681] [moveit.ros.occupancy_map_monitor.middleware_handle]: Resolution not specified for Octomap. Assuming resolution = 0.1 instead
+[move_group-3] [ERROR] [1767815792.243461378] [moveit.ros.occupancy_map_monitor.middleware_handle]: No 3D sensor plugin(s) defined for octomap updates
+[ros2_control_node-1] [INFO] [1767815793.026755655] [controller_manager]: Loading controller 'arm_controller'
+[ros2_control_node-1] [WARN] [1767815793.046907439] [arm_controller]: [Deprecated]: "allow_nonzero_velocity_at_trajectory_end" is set to true. The default behavior will change to false.
+[spawner-6] [INFO] [1767815793.068561967] [spawner_arm_controller]: [94mLoaded [1marm_controller[0m
+[ros2_control_node-1] [INFO] [1767815793.073121527] [controller_manager]: Configuring controller 'arm_controller'
+[ros2_control_node-1] [INFO] [1767815793.073643883] [arm_controller]: No specific joint names are used for command interfaces. Using 'joints' parameter.
+[ros2_control_node-1] [INFO] [1767815793.073755439] [arm_controller]: Command interfaces are [position] and state interfaces are [position velocity].
+[ros2_control_node-1] [INFO] [1767815793.073841458] [arm_controller]: Using 'splines' interpolation method.
+[ros2_control_node-1] [INFO] [1767815793.077143756] [arm_controller]: Controller state will be published at 50.00 Hz.
+[ros2_control_node-1] [INFO] [1767815793.083104136] [arm_controller]: Action status changes will be monitored at 20.00 Hz.
+[spawner-6] [INFO] [1767815793.147692313] [spawner_arm_controller]: [92mConfigured and activated [1marm_controller[0m
+[rviz2-4] [ERROR] [1767815793.263532046] [moveit_ros_visualization.motion_planning_frame]: Action server: /recognize_objects not available
+[rviz2-4] [INFO] [1767815793.301931832] [moveit_ros_visualization.motion_planning_frame]: MoveGroup namespace changed: / -> . Reloading params.
+[rviz2-4] [ERROR] [1767815793.332005806] [rviz2]: PluginlibFactory: The plugin for class 'moveit_rviz_plugin/MotionPlanning' failed to load. Error: According to the loaded plugin descriptions the class moveit_rviz_plugin/MotionPlanning with base class type rviz_common::Panel does not exist. Declared types are  rviz_visual_tools/RvizVisualToolsGui
+[rviz2-4] [INFO] [1767815793.363138700] [moveit_rdf_loader.rdf_loader]: Loaded robot model in 0.00454756 seconds
+[rviz2-4] [INFO] [1767815793.363250928] [moveit_robot_model.robot_model]: Loading robot model 'exodus_arm'...
+[INFO] [spawner-6]: process has finished cleanly [pid 16381]
+[rviz2-4] [WARN] [1767815794.380056499] [kdl_parser]: The root link base_link has an inertia specified in the URDF, but KDL does not support a root link with an inertia.  As a workaround, you can add an extra dummy link to your URDF.
+[rviz2-4] [INFO] [1767815796.834573393] [moveit_ros.planning_scene_monitor.planning_scene_monitor]: Starting planning scene monitor
+[rviz2-4] [INFO] [1767815796.835929763] [moveit_ros.planning_scene_monitor.planning_scene_monitor]: Listening to '/monitored_planning_scene'
+[rviz2-4] NvMapMemAllocInternalTagged: 1075072515 error 12
+[rviz2-4] NvMapMemHandleAlloc: error 0
+[rviz2-4] NvMapMemAllocInternalTagged: 1075072515 error 12
+[rviz2-4] NvMapMemHandleAlloc: error 0
+[rviz2-4] NvMapMemAllocInternalTagged: 1075072515 error 12
+[rviz2-4] NvMapMemHandleAlloc: error 0
+[rviz2-4] NvMapMemAllocInternalTagged: 1075072515 error 12
+[rviz2-4] NvMapMemHandleAlloc: error 0
+[rviz2-4] NvMapMemAllocInternalTagged: 1075072515 error 12
+[rviz2-4] NvMapMemHandleAlloc: error 0
+[rviz2-4] NvMapMemAllocInternalTagged: 1075072515 error 12
+[rviz2-4] NvMapMemHandleAlloc: error 0
+[rviz2-4] NvMapMemAllocInternalTagged: 1075072515 error 12
+[rviz2-4] NvMapMemHandleAlloc: error 0
+[rviz2-4] NvMapMemAllocInternalTagged: 1075072515 error 12
+[rviz2-4] NvMapMemHandleAlloc: error 0
+[rviz2-4] NvMapMemAllocInternalTagged: 1075072515 error 12
+[rviz2-4] NvMapMemHandleAlloc: error 0
+[rviz2-4] NvMapMemAllocInternalTagged: 1075072515 error 12
+[rviz2-4] NvMapMemHandleAlloc: error 0
+[rviz2-4] NvMapMemAllocInternalTagged: 1075072515 error 12
+[rviz2-4] NvMapMemHandleAlloc: error 0
+[rviz2-4] NvMapMemAllocInternalTagged: 1075072515 error 12
+[rviz2-4] NvMapMemHandleAlloc: error 0
+[rviz2-4] NvMapMemAllocInternalTagged: 1075072515 error 12
+[rviz2-4] NvMapMemHandleAlloc: error 0
+[rviz2-4] NvMapMemAllocInternalTagged: 1075072515 error 12
+[rviz2-4] NvMapMemHandleAlloc: error 0
+[rviz2-4] NvMapMemAllocInternalTagged: 1075072515 error 12
+[rviz2-4] NvMapMemHandleAlloc: error 0
+[rviz2-4] NvMapMemAllocInternalTagged: 1075072515 error 12
+[rviz2-4] NvMapMemHandleAlloc: error 0
+[rviz2-4] NvMapMemAllocInternalTagged: 1075072515 error 12
+[rviz2-4] NvMapMemHandleAlloc: error 0
+[rviz2-4] NvMapMemAllocInternalTagged: 1075072515 error 12
+[rviz2-4] NvMapMemHandleAlloc: error 0
+[rviz2-4] NvMapMemAllocInternalTagged: 1075072515 error 12
+[rviz2-4] NvMapMemHandleAlloc: error 0
+[rviz2-4] NvMapMemAllocInternalTagged: 1075072515 error 12
+[rviz2-4] NvMapMemHandleAlloc: error 0
+[rviz2-4] NvMapMemAllocInternalTagged: 1075072515 error 12
+[rviz2-4] NvMapMemHandleAlloc: error 0
+[rviz2-4] NvMapMemAllocInternalTagged: 1075072515 error 12
+[rviz2-4] NvMapMemHandleAlloc: error 0
+[rviz2-4] NvMapMemAllocInternalTagged: 1075072515 error 12
+[rviz2-4] NvMapMemHandleAlloc: error 0
+[rviz2-4] [INFO] [1767815800.116837810] [interactive_marker_display_187650957673424]: Connected on namespace: /rviz_moveit_motion_planning_display/robot_interaction_interactive_marker_topic
+[rviz2-4] [WARN] [1767815800.173865318] [kdl_parser]: The root link base_link has an inertia specified in the URDF, but KDL does not support a root link with an inertia.  As a workaround, you can add an extra dummy link to your URDF.
+[rviz2-4] [WARN] [1767815800.174105871] [kdl_parser]: The root link base_link has an inertia specified in the URDF, but KDL does not support a root link with an inertia.  As a workaround, you can add an extra dummy link to your URDF.
+[rviz2-4] [INFO] [1767815800.319633565] [interactive_marker_display_187650957673424]: Sending request for interactive markers
+[rviz2-4] [INFO] [1767815800.396094109] [interactive_marker_display_187650957673424]: Service response received for initialization
+[rviz2-4] [INFO] [1767815805.214623453] [moveit_ros.planning_scene_monitor.planning_scene_monitor]: Failed to call service get_planning_scene, have you launched move_group or called psm.providePlanningSceneService()?
+[rviz2-4] [INFO] [1767815805.215057133] [moveit_ros_visualization.motion_planning_frame]: group arm
+[rviz2-4] [INFO] [1767815805.215083022] [moveit_ros_visualization.motion_planning_frame]: Constructing new MoveGroup connection for group 'arm' in namespace ''
+[move_group-3] [INFO] [1767815820.514449699] [moveit.ros_planning_interface.moveit_cpp]: Loading planning pipeline 'ompl'
+[move_group-3] [INFO] [1767815820.695274995] [moveit.ros_planning.planning_pipeline]: Using planning interface 'OMPL'
+[move_group-3] [INFO] [1767815820.709018858] [moveit_ros.add_time_optimal_parameterization]: Param 'ompl.path_tolerance' was not set. Using default value: 0.100000
+[move_group-3] [INFO] [1767815820.709109485] [moveit_ros.add_time_optimal_parameterization]: Param 'ompl.resample_dt' was not set. Using default value: 0.100000
+[move_group-3] [INFO] [1767815820.709131502] [moveit_ros.add_time_optimal_parameterization]: Param 'ompl.min_angle_change' was not set. Using default value: 0.001000
+[move_group-3] [INFO] [1767815820.709182352] [moveit_ros.fix_workspace_bounds]: Param 'ompl.default_workspace_bounds' was not set. Using default value: 10.000000
+[move_group-3] [INFO] [1767815820.709235730] [moveit_ros.fix_start_state_bounds]: Param 'ompl.start_state_max_bounds_error' was set to 0.100000
+[move_group-3] [INFO] [1767815820.709255602] [moveit_ros.fix_start_state_bounds]: Param 'ompl.start_state_max_dt' was not set. Using default value: 0.500000
+[move_group-3] [INFO] [1767815820.709294612] [moveit_ros.fix_start_state_collision]: Param 'ompl.start_state_max_dt' was not set. Using default value: 0.500000
+[move_group-3] [INFO] [1767815820.709310324] [moveit_ros.fix_start_state_collision]: Param 'ompl.jiggle_fraction' was not set. Using default value: 0.020000
+[move_group-3] [INFO] [1767815820.709326677] [moveit_ros.fix_start_state_collision]: Param 'ompl.max_sampling_attempts' was not set. Using default value: 100
+[move_group-3] [INFO] [1767815820.709364054] [moveit.ros_planning.planning_pipeline]: Using planning request adapter 'Add Time Optimal Parameterization'
+[move_group-3] [INFO] [1767815820.709378295] [moveit.ros_planning.planning_pipeline]: Using planning request adapter 'Fix Workspace Bounds'
+[move_group-3] [INFO] [1767815820.709389495] [moveit.ros_planning.planning_pipeline]: Using planning request adapter 'Fix Start State Bounds'
+[move_group-3] [INFO] [1767815820.709399544] [moveit.ros_planning.planning_pipeline]: Using planning request adapter 'Fix Start State In Collision'
+[move_group-3] [INFO] [1767815820.709409912] [moveit.ros_planning.planning_pipeline]: Using planning request adapter 'Fix Start State Path Constraints'
+[move_group-3] [FATAL] [1767815820.848963236] [moveit_ros.trajectory_execution_manager]: Exception while loading controller manager 'moveit_simple_controller_manager/MoveItSimpleControllerManager': According to the loaded plugin descriptions the class moveit_simple_controller_manager/MoveItSimpleControllerManager with base class type moveit_controller_manager::MoveItControllerManager does not exist. Declared types are 
+[move_group-3] [ERROR] [1767815820.849058215] [moveit_ros.trajectory_execution_manager]: Failed to reload controllers: `controller_manager_` does not exist.
+[move_group-3] [INFO] [1767815820.852253116] [moveit_ros.trajectory_execution_manager]: Trajectory execution is managing controllers
+[move_group-3] [INFO] [1767815820.852335167] [move_group.move_group]: MoveGroup debug mode is ON
+[move_group-3] [INFO] [1767815820.992267673] [move_group.move_group]: 
+[move_group-3] 
+[move_group-3] ********************************************************
+[move_group-3] * MoveGroup using: 
+[move_group-3] *     - ApplyPlanningSceneService
+[move_group-3] *     - ClearOctomapService
+[move_group-3] *     - CartesianPathService
+[move_group-3] *     - ExecuteTrajectoryAction
+[move_group-3] *     - GetPlanningSceneService
+[move_group-3] *     - KinematicsService
+[move_group-3] *     - MoveAction
+[move_group-3] *     - MotionPlanService
+[move_group-3] *     - QueryPlannersService
+[move_group-3] *     - StateValidationService
+[move_group-3] ********************************************************
+[move_group-3] 
+[move_group-3] [INFO] [1767815820.992426687] [moveit_move_group_capabilities_base.move_group_context]: MoveGroup context using planning plugin ompl_interface/OMPLPlanner
+[move_group-3] [INFO] [1767815820.992455712] [moveit_move_group_capabilities_base.move_group_context]: MoveGroup context initialization complete
+[move_group-3] [96mLoading 'move_group/ApplyPlanningSceneService'...
+[move_group-3] [0m[96mLoading 'move_group/ClearOctomapService'...
+[move_group-3] [0m[96mLoading 'move_group/MoveGroupCartesianPathService'...
+[move_group-3] [0m[96mLoading 'move_group/MoveGroupExecuteTrajectoryAction'...
+[move_group-3] [0m[96mLoading 'move_group/MoveGroupGetPlanningSceneService'...
+[move_group-3] [0m[96mLoading 'move_group/MoveGroupKinematicsService'...
+[move_group-3] [0m[96mLoading 'move_group/MoveGroupMoveAction'...
+[move_group-3] [0m[96mLoading 'move_group/MoveGroupPlanService'...
+[move_group-3] [0m[96mLoading 'move_group/MoveGroupQueryPlannersService'...
+[move_group-3] [0m[96mLoading 'move_group/MoveGroupStateValidationService'...
+[move_group-3] [0m[92m
+[move_group-3] You can start planning now!
+[move_group-3] 
+[rviz2-4] [INFO] [1767815821.018917319] [move_group_interface]: Ready to take commands for planning group arm.
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[move_group-3] [INFO] [1767816236.357084938] [rclcpp]: signal_handler(signum=2)
+[ros2_control_node-1] [INFO] [1767816236.357081578] [rclcpp]: signal_handler(signum=2)
+[static_transform_publisher-5] [INFO] [1767816236.357081930] [rclcpp]: signal_handler(signum=2)
+[rviz2-4] [INFO] [1767816236.357218158] [rclcpp]: signal_handler(signum=2)
+[rviz2-4] [WARN] [1767816236.358592091] [interactive_marker_display_187650957673424]: Server not available while running, resetting
+[rviz2-4] 
+[rviz2-4] >>> [rcutils|error_handling.c:108] rcutils_set_error_state()
+[rviz2-4] This error state is being overwritten:
+[rviz2-4] 
+[rviz2-4]   'rcl node's context is invalid, at ./src/rcl/node.c:428'
+[rviz2-4] 
+[rviz2-4] with this new error message:
+[rviz2-4] 
+[rviz2-4]   'publisher's context is invalid, at ./src/rcl/publisher.c:389'
+[rviz2-4] 
+[rviz2-4] rcutils_reset_error() should be called after error handling to avoid this.
+[rviz2-4] <<<
+[rviz2-4] Failed to publish log message to rosout: publisher's context is invalid, at ./src/rcl/publisher.c:389
+[ros2_control_node-1] [INFO] [1767816236.399968162] [controller_manager]: Shutdown request received....
+[ros2_control_node-1] [INFO] [1767816236.408185070] [controller_manager]: Shutting down all controllers in the controller manager.
+[ros2_control_node-1] [INFO] [1767816236.436131263] [controller_manager]: Deactivating controller 'joint_state_broadcaster'
+[ros2_control_node-1] [INFO] [1767816236.446251625] [controller_manager]: Shutting down controller 'joint_state_broadcaster'
+[ros2_control_node-1] [INFO] [1767816236.446462832] [controller_manager]: Deactivating controller 'arm_controller'
+[move_group-3] [INFO] [1767816236.509843717] [moveit.ros_planning_interface.moveit_cpp]: Deleting MoveItCpp
+[ros2_control_node-1] [INFO] [1767816236.544027105] [controller_manager]: Shutting down controller 'arm_controller'
+[ros2_control_node-1] [INFO] [1767816236.544531346] [resource_manager]: 'deactivate' hardware 'ExodusArmSystem' 
+[ros2_control_node-1] [INFO] [1767816236.544626389] [FakeCubeMarsHardware]: Deactivating fake hardware
+[ros2_control_node-1] [INFO] [1767816236.544664214] [resource_manager]: Successful 'deactivate' of hardware 'ExodusArmSystem'
+[ros2_control_node-1] [INFO] [1767816236.544680343] [resource_manager]: 'shutdown' hardware 'ExodusArmSystem' 
+[ros2_control_node-1] [INFO] [1767816236.544696311] [resource_manager]: Successful 'shutdown' of hardware 'ExodusArmSystem'
+[ros2_control_node-1] [INFO] [1767816236.544710136] [controller_manager]: Shutting down the controller manager.
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT) again, ignoring...
+[rviz2-4] [INFO] [1767816236.628724846] [rclcpp]: signal_handler(signum=2)
+[ERROR] [static_transform_publisher-5]: process has died [pid 16317, exit code -2, cmd '/opt/ros/humble/lib/tf2_ros/static_transform_publisher 0 0 0 0 0 0 world base_link --ros-args -r __node:=static_tf_world_to_base'].
+[ERROR] [ros2_control_node-1]: process has died [pid 16309, exit code -2, cmd '/opt/ros/humble/lib/controller_manager/ros2_control_node --ros-args --params-file /tmp/launch_params_9gbsasx8 --params-file /home/arm2025/arm_wa01/Exodus2025_RoboticArm/install/arm_controller/share/arm_controller/config/controllers.yaml'].
+[ERROR] [move_group-3]: process has died [pid 16313, exit code -2, cmd '/opt/ros/humble/lib/moveit_ros_move_group/move_group --ros-args --params-file /tmp/launch_params__k1v_hvd --params-file /tmp/launch_params_lwlv3jgy --params-file /tmp/launch_params_wmhxwgkn --params-file /tmp/launch_params_wsk7jp0_ --params-file /tmp/launch_params_fc827_mi --params-file /tmp/launch_params_z2ih9fwg --params-file /tmp/launch_params_y3hg8bqy --params-file /tmp/launch_params_xymcsqrw --params-file /tmp/launch_params_id_v0zee'].
+[move_group-3] [0m
+[rviz2-4] 
+[rviz2-4] >>> [rcutils|error_handling.c:108] rcutils_set_error_state()
+[rviz2-4] This error state is being overwritten:
+[rviz2-4] 
+[rviz2-4]   'rcl node's context is invalid, at ./src/rcl/node.c:428'
+[rviz2-4] 
+[rviz2-4] with this new error message:
+[rviz2-4] 
+[rviz2-4]   'publisher's context is invalid, at ./src/rcl/publisher.c:389'
+[rviz2-4] 
+[rviz2-4] rcutils_reset_error() should be called after error handling to avoid this.
+[rviz2-4] <<<
+[rviz2-4] [INFO] [1767816236.810217364] [moveit_ros.planning_scene_monitor.planning_scene_monitor]: Stopping planning scene monitor
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT) again, ignoring...
+[ERROR] [rviz2-4]: process has died [pid 16315, exit code -2, cmd '/opt/ros/humble/lib/rviz2/rviz2 -d /home/arm2025/arm_wa01/Exodus2025_RoboticArm/install/arm_moveit_config/share/arm_moveit_config/config/moveit.rviz --ros-args -r __node:=rviz2 --params-file /tmp/launch_params_0uh3ogzz --params-file /tmp/launch_params_ifugpooc --params-file /tmp/launch_params_1jxf8ay7 --params-file /tmp/launch_params_cx1fzn_e'].

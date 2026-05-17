@@ -2,39 +2,46 @@
 # These limits augment or override those specified in the URDF
 
 joint_limits:
-  Joint1:
+  Joint_1:
     has_velocity_limits: true
     max_velocity: 7.5
     has_acceleration_limits: true
     max_acceleration: 10.0
     has_jerk_limits: false
 
-  Joint2:
+  Joint_2:
     has_velocity_limits: true
     max_velocity: 12.0
     has_acceleration_limits: true
     max_acceleration: 3.0
     has_jerk_limits: false
 
-  Joint3:
+  Joint_3:
     has_velocity_limits: true
-    max_velocity: 12.0
+    max_velocity: 5.03
     has_acceleration_limits: true
     max_acceleration: 3.0
     has_jerk_limits: false
 
-  Joint4:
+  Joint_4:
     has_velocity_limits: true
     max_velocity: 2.5
     has_acceleration_limits: true
     max_acceleration: 10.0
     has_jerk_limits: false
 
-  Joint5:
+  Joint_5:
     has_velocity_limits: true
     max_velocity: 2.5
     has_acceleration_limits: true
     max_acceleration: 10.0
+    has_jerk_limits: false
+
+  Finger_Left_Joint:
+    has_velocity_limits: true
+    max_velocity: 5.55
+    has_acceleration_limits: true
+    max_acceleration: 1.0
     has_jerk_limits: false
 
 

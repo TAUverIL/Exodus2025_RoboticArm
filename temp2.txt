@@ -1,0 +1,45 @@
+[INFO] [launch]: All log files can be found below /home/arm2025/.ros/log/2026-01-07-21-56-35-825205-arm2025-desktop-16406
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [servo_node_main-1]: process started with pid [16419]
+[INFO] [component_container_mt-2]: process started with pid [16421]
+[component_container_mt-2] [INFO] [1767815796.639892773] [moveit_servo_demo_container]: Load Library: /opt/ros/humble/lib/libstatic_transform_broadcaster_node.so
+[component_container_mt-2] [INFO] [1767815796.645026690] [moveit_servo_demo_container]: Found class: rclcpp_components::NodeFactoryTemplate<tf2_ros::StaticTransformBroadcasterNode>
+[component_container_mt-2] [INFO] [1767815796.645144391] [moveit_servo_demo_container]: Instantiate class: rclcpp_components::NodeFactoryTemplate<tf2_ros::StaticTransformBroadcasterNode>
+[INFO] [launch_ros.actions.load_composable_nodes]: Loaded node '/static_tf2_broadcaster' in container '/moveit_servo_demo_container'
+[component_container_mt-2] [ERROR] [1767815796.712951883] [moveit_servo_demo_container]: Could not find requested resource in ament index
+[ERROR] [launch_ros.actions.load_composable_nodes]: Failed to load node 'controller_to_servo_node' of type 'arm_moveit_config::JoyToServoPub' in container '/moveit_servo_demo_container': Could not find requested resource in ament index
+[component_container_mt-2] [INFO] [1767815796.717661497] [moveit_servo_demo_container]: Load Library: /opt/ros/humble/lib/libjoy.so
+[component_container_mt-2] [INFO] [1767815796.748694162] [moveit_servo_demo_container]: Found class: rclcpp_components::NodeFactoryTemplate<joy::Joy>
+[component_container_mt-2] [INFO] [1767815796.749972193] [moveit_servo_demo_container]: Instantiate class: rclcpp_components::NodeFactoryTemplate<joy::Joy>
+[servo_node_main-1] [WARN] [1767815796.765200242] [moveit_servo.servo_node]: Intra-process communication is disabled, consider enabling it by adding: 
+[servo_node_main-1] extra_arguments=[{'use_intra_process_comms' : True}]
+[servo_node_main-1] to the Servo composable node in the launch file
+[servo_node_main-1] [INFO] [1767815796.790616668] [moveit_rdf_loader.rdf_loader]: Loaded robot model in 0.0108861 seconds
+[servo_node_main-1] [INFO] [1767815796.790717791] [moveit_robot_model.robot_model]: Loading robot model 'exodus_arm'...
+[component_container_mt-2] [INFO] [1767815797.189660054] [joy_node]: Opened joystick: Xbox 360 Controller.  deadzone: 0.050000
+[INFO] [launch_ros.actions.load_composable_nodes]: Loaded node '/joy_node' in container '/moveit_servo_demo_container'
+[servo_node_main-1] [WARN] [1767815798.566702973] [kdl_parser]: The root link base_link has an inertia specified in the URDF, but KDL does not support a root link with an inertia.  As a workaround, you can add an extra dummy link to your URDF.
+[servo_node_main-1] [INFO] [1767815801.354217834] [moveit_ros.current_state_monitor]: Listening to joint states on topic '/joint_states'
+[servo_node_main-1] [INFO] [1767815801.392628432] [moveit_ros.planning_scene_monitor.planning_scene_monitor]: Listening to '/attached_collision_object' for attached collision objects
+[servo_node_main-1] [INFO] [1767815801.392710835] [moveit_ros.planning_scene_monitor.planning_scene_monitor]: Starting planning scene monitor
+[servo_node_main-1] [INFO] [1767815801.395692321] [moveit_ros.planning_scene_monitor.planning_scene_monitor]: Listening to '/planning_scene'
+[servo_node_main-1] [INFO] [1767815801.395791332] [moveit_ros.planning_scene_monitor.planning_scene_monitor]: Starting world geometry update monitor for collision objects, attached objects, octomap updates.
+[servo_node_main-1] [INFO] [1767815801.397371486] [moveit_ros.planning_scene_monitor.planning_scene_monitor]: Listening to 'collision_object'
+[servo_node_main-1] [INFO] [1767815801.398742929] [moveit_ros.planning_scene_monitor.planning_scene_monitor]: Listening to 'planning_scene_world' for planning scene world geometry
+[servo_node_main-1] [WARN] [1767815801.405313347] [moveit.ros.occupancy_map_monitor.middleware_handle]: Resolution not specified for Octomap. Assuming resolution = 0.1 instead
+[servo_node_main-1] [ERROR] [1767815801.405395142] [moveit.ros.occupancy_map_monitor.middleware_handle]: No 3D sensor plugin(s) defined for octomap updates
+[servo_node_main-1] [INFO] [1767815829.533907493] [moveit_ros.planning_scene_monitor.planning_scene_monitor]: Publishing maintained planning scene on '/servo_node/publish_planning_scene'
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT) again, ignoring...
+[component_container_mt-2] [INFO] [1767816239.941476644] [rclcpp]: signal_handler(signum=2)
+[servo_node_main-1] [INFO] [1767816239.941474788] [rclcpp]: signal_handler(signum=2)
+[servo_node_main-1] Warning: class_loader.ClassLoader: SEVERE WARNING!!! Attempting to unload library while objects created by this loader exist in the heap! You should delete your objects before attempting to unload the library or destroying the ClassLoader. The library will NOT be unloaded.
+[servo_node_main-1]          at line 127 in ./src/class_loader.cpp
+[servo_node_main-1] [INFO] [1767816240.026129038] [moveit_ros.planning_scene_monitor.planning_scene_monitor]: Stopped publishing maintained planning scene.
+[servo_node_main-1] [INFO] [1767816240.033282231] [moveit_ros.planning_scene_monitor.planning_scene_monitor]: Stopping world geometry monitor
+[servo_node_main-1] [INFO] [1767816240.037814571] [moveit_ros.planning_scene_monitor.planning_scene_monitor]: Stopping planning scene monitor
+[component_container_mt-2] [INFO] [1767816240.148635371] [rclcpp]: signal_handler(signum=2)
+[ERROR] [servo_node_main-1]: process has died [pid 16419, exit code -2, cmd '/opt/ros/humble/lib/moveit_servo/servo_node_main --ros-args --params-file /tmp/launch_params_xammuk6l --params-file /tmp/launch_params_u75oud5y --params-file /tmp/launch_params_d707hmbo --params-file /tmp/launch_params_ym6whs0j'].
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT) again, ignoring...
+[component_container_mt-2] [INFO] [1767816240.294138453] [rclcpp]: signal_handler(signum=2)
+[INFO] [component_container_mt-2]: process has finished cleanly [pid 16421]

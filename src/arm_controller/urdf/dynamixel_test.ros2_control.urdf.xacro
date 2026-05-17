@@ -2,7 +2,8 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="dynamixel_test_robot">
 
   <link name="world"/>
-  <link name="link1">
+  
+  <link name="Link_5">
     <inertial>
       <mass value="0.1"/>
       <origin xyz="0 0 0"/>
@@ -10,11 +11,41 @@
     </inertial>
   </link>
 
-  <joint name="joint1" type="revolute">
+  <link name="Finger_Left">
+    <inertial>
+      <mass value="0.05"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <link name="Finger_Right">
+    <inertial>
+      <mass value="0.05"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <joint name="world_to_link5" type="fixed">
     <parent link="world"/>
-    <child link="link1"/>
-    <axis xyz="0 0 1"/>
-    <limit lower="-3.14" upper="3.14" effort="10.0" velocity="5.0"/>
+    <child link="Link_5"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="Finger_Left_Joint" type="prismatic">
+    <parent link="Link_5"/>
+    <child link="Finger_Left"/>
+    <axis xyz="-1 0 0"/>
+    <limit lower="0.0" upper="0.04" effort="7.3" velocity="5.55"/>
+  </joint>
+
+  <joint name="Finger_Right_Joint" type="prismatic">
+    <parent link="Link_5"/>
+    <child link="Finger_Right"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="0.0" upper="0.04" effort="7.3" velocity="5.55"/>
+    <mimic joint="Finger_Left_Joint"/>
   </joint>
 
   <ros2_control name="DynamixelSystem" type="system">
@@ -24,7 +55,7 @@
       <param name="baud_rate">57600</param>
     </hardware>
 
-    <joint name="joint1">
+    <joint name="Finger_Left_Joint">
       <param name="id">1</param> 
       <command_interface name="position"/>
       <state_interface name="position"/>

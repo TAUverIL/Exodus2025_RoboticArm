@@ -9,6 +9,10 @@ controller_manager:
     arm_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
+    # Velocity controller for joystick Servo
+    servo_velocity_controller:
+      type: velocity_controllers/JointGroupVelocityController
+
     # Gripper controller
     gripper_controller:
       type: joint_trajectory_controller/JointTrajectoryController
@@ -31,6 +35,15 @@ arm_controller:
     state_interfaces:
       - position
       - velocity
+
+servo_velocity_controller:
+  ros__parameters:
+    joints:
+      - Joint_1
+      - Joint_2
+      - Joint_3
+      - Joint_4
+      - Joint_5
 
 # Config for gripper
 gripper_controller:

@@ -403,7 +403,7 @@
       xyz="-0.99999 -0.0032051 0" />
     <limit
       lower="0.0"
-      upper="0.04"
+      upper="0.08"
       effort="7.3"
       velocity="5.55" />
     <dynamics
@@ -464,7 +464,7 @@
       xyz="-0.99999 -0.0032051 0" />
     <limit
       lower="0.0"
-      upper="0.04"
+      upper="0.08"
       effort="7.3"
       velocity="5.55" />
     <dynamics

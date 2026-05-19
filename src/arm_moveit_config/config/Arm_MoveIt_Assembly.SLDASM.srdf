@@ -39,7 +39,7 @@
     </group_state>
 
     <group_state name="open" group="gripper">
-        <joint name="Finger_Left_Joint" value="0.04"/>
+        <joint name="Finger_Left_Joint" value="0.08"/>
     </group_state>
 
     <group_state name="close" group="gripper">
@@ -75,4 +75,3 @@
     <disable_collisions link1="Link_4"        link2="camera_link" reason="Default"/>
 
 </robot>
-

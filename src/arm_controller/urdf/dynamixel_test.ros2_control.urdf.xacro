@@ -37,14 +37,14 @@
     <parent link="Link_5"/>
     <child link="Finger_Left"/>
     <axis xyz="-1 0 0"/>
-    <limit lower="0.0" upper="0.04" effort="7.3" velocity="5.55"/>
+    <limit lower="0.0" upper="0.08" effort="7.3" velocity="5.55"/>
   </joint>
 
   <joint name="Finger_Right_Joint" type="prismatic">
     <parent link="Link_5"/>
     <child link="Finger_Right"/>
     <axis xyz="1 0 0"/>
-    <limit lower="0.0" upper="0.04" effort="7.3" velocity="5.55"/>
+    <limit lower="0.0" upper="0.08" effort="7.3" velocity="5.55"/>
     <mimic joint="Finger_Left_Joint"/>
   </joint>
 

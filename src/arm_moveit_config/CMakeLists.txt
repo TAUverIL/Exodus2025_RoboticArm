@@ -34,6 +34,7 @@ install(
 install(
   PROGRAMS
     scripts/joy_to_servo.py
+    scripts/xbox_joint_servo.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

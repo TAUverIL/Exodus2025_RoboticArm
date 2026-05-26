@@ -1,0 +1,46 @@
+xbox_joint_servo:
+  ros__parameters:
+    joint_names:
+      - Joint_1
+      - Joint_2
+      - Joint_3
+      - Joint_4
+      - Joint_5
+
+    # Source format per joint:
+    #   axis:<index>[:invert]   -> joy.axes[index] (Linux Xbox: 0=LX,1=LY,3=RX,4=RY,6=DPx,7=DPy)
+    #   dpad:<index>[:invert]   -> same as axis (kept for readability)
+    #   trigger:rt-lt|lt-rt     -> combined LT/RT (axes 2 and 5)
+    #   buttons:<plus>,<minus>  -> +1 when 'plus' pressed, -1 when 'minus' pressed
+    joint_sources:
+      - "axis:0"            # Joint_1: left stick X
+      - "axis:1:invert"     # Joint_2: left stick Y (push up = +)
+      - "axis:4:invert"     # Joint_3: right stick Y
+      - "axis:3"            # Joint_4: right stick X
+      - "trigger:rt-lt"     # Joint_5: RT - LT
+
+    # Max joint velocity (rad/s) at full stick deflection. Tune to taste.
+    joint_velocity_scales: [0.25, 0.25, 0.20, 0.30, 0.35]
+
+    # Soft limits applied to commanded positions (rad). Keep within URDF/joint_limits.
+    joint_lower_limits: [-3.10, -1.50, -2.40, -3.10, -3.10]
+    joint_upper_limits: [ 3.10,  1.50,  2.40,  3.10,  3.10]
+
+    deadman_button: 5        # RB
+    turbo_button: 4          # LB
+    turbo_multiplier: 1.8
+    deadband: 0.12
+    publish_rate: 30.0
+    command_duration: 0.12   # seconds per trajectory point
+
+    arm_topic: /arm_controller/joint_trajectory
+    joint_state_topic: /joint_states
+
+    # Gripper
+    gripper_topic: /gripper_controller/joint_trajectory
+    gripper_joint: Finger_Left_Joint
+    gripper_open: 0.08
+    gripper_closed: 0.0
+    gripper_open_button: 0   # A
+    gripper_close_button: 1  # B
+    gripper_command_duration: 0.8

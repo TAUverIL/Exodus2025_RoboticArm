@@ -110,6 +110,20 @@ hardware_interface::CallbackReturn CubeMarsSystemHardware::on_init(
       enc_offs_.emplace_back(0);
     }
 
+    int direction = 1;
+    if (joint.parameters.count("direction") != 0)
+    {
+      direction = std::stoi(joint.parameters.at("direction"));
+      if (direction != 1 && direction != -1)
+      {
+        RCLCPP_FATAL(
+          rclcpp::get_logger("CubeMarsSystemHardware"),
+          "Invalid direction for %s: %d. Use 1 or -1.", joint.name.c_str(), direction);
+        return hardware_interface::CallbackReturn::ERROR;
+      }
+    }
+    directions_.emplace_back(direction);
+
     if (joint.parameters.count("trq_limit") != 0 && std::stod(joint.parameters.at("trq_limit")) > 0)
     {
       trq_limits_.emplace_back(std::stod(joint.parameters.at("trq_limit")));
@@ -375,9 +389,11 @@ hardware_interface::return_type CubeMarsSystemHardware::read(
     else
     {
       // Unit conversions
-      hw_states_positions_[i] = hw_states_positions_[i] * 0.1 * M_PI / 180 - enc_offs_[i];
-      hw_states_velocities_[i] = hw_states_velocities_[i] * 10 / erpm_conversions_[i];
-      hw_states_efforts_[i] = hw_states_efforts_[i] * 0.01 * torque_constants_[i] *
+      hw_states_positions_[i] = directions_[i] * hw_states_positions_[i] * 0.1 * M_PI / 180 -
+        enc_offs_[i];
+      hw_states_velocities_[i] = directions_[i] * hw_states_velocities_[i] * 10 /
+        erpm_conversions_[i];
+      hw_states_efforts_[i] = directions_[i] * hw_states_efforts_[i] * 0.01 * torque_constants_[i] *
         std::stoi(info_.joints[i].parameters.at("gear_ratio"));
       hw_states_temperatures_[i] = read_data[6];
       if (trq_limits_[i] != 0 && hw_states_efforts_[i] > trq_limits_[i])
@@ -429,7 +445,8 @@ hardware_interface::return_type CubeMarsSystemHardware::write(
         {
           if (!std::isnan(hw_commands_efforts_[i]))
           {
-            std::int32_t current = hw_commands_efforts_[i] * 1000 / torque_constants_[i];
+            std::int32_t current = directions_[i] * hw_commands_efforts_[i] * 1000 /
+              torque_constants_[i];
             if (std::abs(current) >= 60000)
             {
               RCLCPP_ERROR(
@@ -455,7 +472,8 @@ hardware_interface::return_type CubeMarsSystemHardware::write(
         {
           if (!std::isnan(hw_commands_velocities_[i]))
           {
-            std::int32_t speed = hw_commands_velocities_[i] * erpm_conversions_[i];
+            std::int32_t speed = directions_[i] * hw_commands_velocities_[i] *
+              erpm_conversions_[i];
             if (std::abs(speed) >= 100000)
             {
               RCLCPP_ERROR(
@@ -481,7 +499,8 @@ hardware_interface::return_type CubeMarsSystemHardware::write(
         {
           if (!std::isnan(hw_commands_positions_[i]))
           {
-            std::int32_t position = (hw_commands_positions_[i] + enc_offs_[i]) * 10000 * 180 / M_PI;
+            std::int32_t position = directions_[i] * (hw_commands_positions_[i] + enc_offs_[i]) *
+              10000 * 180 / M_PI;
             if (std::abs(position) >= 360000000)
             {
               RCLCPP_ERROR(
@@ -506,7 +525,8 @@ hardware_interface::return_type CubeMarsSystemHardware::write(
         {
           if (!std::isnan(hw_commands_positions_[i]))
           {
-            std::int32_t position = (hw_commands_positions_[i] + enc_offs_[i]) * 10000 * 180 / M_PI;
+            std::int32_t position = directions_[i] * (hw_commands_positions_[i] + enc_offs_[i]) *
+              10000 * 180 / M_PI;
             std::int16_t vel = limits_[i].first;
             std::int16_t acc = limits_[i].second;
             if (std::abs(position) >= 360000000)

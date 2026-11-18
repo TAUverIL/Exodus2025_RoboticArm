@@ -38,6 +38,7 @@ hardware_interface::CallbackReturn DynamixelSystem::on_init(
   // Initialize storage vectors
   hw_positions_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_velocities_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+  hw_efforts_.resize(info_.joints.size(), 0.0);
   hw_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 
   // 2. Read Joint IDs from URDF
@@ -47,6 +48,12 @@ hardware_interface::CallbackReturn DynamixelSystem::on_init(
     if (joint.parameters.count("id"))
     {
       dxl_ids_.push_back(std::stoi(joint.parameters.at("id")));
+      position_to_motor_scales_.push_back(
+        joint.parameters.count("position_to_motor_scale") ?
+        std::stod(joint.parameters.at("position_to_motor_scale")) : 1.0);
+      position_to_motor_offsets_.push_back(
+        joint.parameters.count("position_to_motor_offset") ?
+        std::stod(joint.parameters.at("position_to_motor_offset")) : 0.0);
     }
     else
     {
@@ -88,10 +95,10 @@ std::vector<hardware_interface::StateInterface> DynamixelSystem::export_state_in
   {
     state_interfaces.emplace_back(hardware_interface::StateInterface(
       info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_positions_[i]));
-    
-    // Optional: Add velocity if needed
-    // state_interfaces.emplace_back(hardware_interface::StateInterface(
-    //   info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &hw_velocities_[i]));
+    state_interfaces.emplace_back(hardware_interface::StateInterface(
+      info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &hw_velocities_[i]));
+    state_interfaces.emplace_back(hardware_interface::StateInterface(
+      info_.joints[i].name, hardware_interface::HW_IF_EFFORT, &hw_efforts_[i]));
   }
   return state_interfaces;
 }
@@ -112,26 +119,46 @@ hardware_interface::CallbackReturn DynamixelSystem::on_activate(
 {
   uint8_t dxl_error = 0;
 
-  // --- ADD THIS BLOCK ---
   // Force Operating Mode = 3 (Position Control)
   // Address 11 is "Operating Mode" for XM/XC/XL series
   uint16_t ADDR_OPERATING_MODE = 11;
-  uint8_t POSITION_MODE = 4;
+  uint8_t POSITION_MODE = 3;
 
   for (auto id : dxl_ids_)
   {
     // 1. Disable Torque first (Mode cannot be changed while Torque is ON)
-    packetHandler_->write1ByteTxRx(portHandler_, id, ADDR_TORQUE_ENABLE, 0, &dxl_error);
+    int result = packetHandler_->write1ByteTxRx(portHandler_, id, ADDR_TORQUE_ENABLE, 0, &dxl_error);
+    if (result != COMM_SUCCESS) {
+      RCLCPP_ERROR(
+        rclcpp::get_logger("DynamixelSystem"),
+        "Failed to disable torque for ID %d before mode change: %s",
+        id, packetHandler_->getTxRxResult(result));
+      return hardware_interface::CallbackReturn::ERROR;
+    } else if (dxl_error != 0) {
+      RCLCPP_ERROR(
+        rclcpp::get_logger("DynamixelSystem"),
+        "Hardware error disabling torque for ID %d before mode change: %s",
+        id, packetHandler_->getRxPacketError(dxl_error));
+      return hardware_interface::CallbackReturn::ERROR;
+    }
 
     // 2. Write Operating Mode
-    int result = packetHandler_->write1ByteTxRx(portHandler_, id, ADDR_OPERATING_MODE, POSITION_MODE, &dxl_error);
+    result = packetHandler_->write1ByteTxRx(portHandler_, id, ADDR_OPERATING_MODE, POSITION_MODE, &dxl_error);
     
     if (result != COMM_SUCCESS) {
-        RCLCPP_ERROR(rclcpp::get_logger("DynamixelSystem"), "Failed to set Position Mode for ID %d", id);
-        return hardware_interface::CallbackReturn::ERROR;
+      RCLCPP_ERROR(
+        rclcpp::get_logger("DynamixelSystem"),
+        "Failed to set Position Mode for ID %d: %s",
+        id, packetHandler_->getTxRxResult(result));
+      return hardware_interface::CallbackReturn::ERROR;
+    } else if (dxl_error != 0) {
+      RCLCPP_ERROR(
+        rclcpp::get_logger("DynamixelSystem"),
+        "Hardware error setting Position Mode for ID %d: %s",
+        id, packetHandler_->getRxPacketError(dxl_error));
+      return hardware_interface::CallbackReturn::ERROR;
     }
   }
-  // --- END ADDITION ---
 
   // Enable Torque for all motors
   for (auto id : dxl_ids_)
@@ -168,7 +195,7 @@ hardware_interface::CallbackReturn DynamixelSystem::on_deactivate(
 }
 
 hardware_interface::return_type DynamixelSystem::read(
-  const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
+  const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {
   // Simple Read Loop (SyncRead is more efficient but complex)
   uint8_t dxl_error = 0;
@@ -184,7 +211,19 @@ hardware_interface::return_type DynamixelSystem::read(
       // NOTE: You need to adjust this conversion factor based on your motor model!
       // Example for XC330 (4096 resolution): 
       // value * (2 * pi / 4096.0)
-      hw_positions_[i] = (dxl_present_position - 2048) * (2.0 * M_PI / 4096.0);    }
+      const double previous_position = hw_positions_[i];
+      const double motor_position = (dxl_present_position - 2048) * (2.0 * M_PI / 4096.0);
+      const double scale = position_to_motor_scales_[i];
+      hw_positions_[i] = scale == 0.0 ? motor_position :
+        (motor_position - position_to_motor_offsets_[i]) / scale;
+
+      if (std::isfinite(previous_position) && period.seconds() > 0.0) {
+        hw_velocities_[i] = (hw_positions_[i] - previous_position) / period.seconds();
+      } else {
+        hw_velocities_[i] = 0.0;
+      }
+      hw_efforts_[i] = 0.0;
+    }
   }
   return hardware_interface::return_type::OK;
 }
@@ -201,14 +240,13 @@ hardware_interface::return_type DynamixelSystem::write(
 
       // 1. Math: Convert Radians to Ticks
       double ticks_per_rad = 4096.0 / (2.0 * M_PI);
-      int32_t goal_pos = static_cast<int32_t>((hw_commands_[i] * ticks_per_rad) + 2048);
+      const double motor_command =
+        (hw_commands_[i] * position_to_motor_scales_[i]) + position_to_motor_offsets_[i];
+      int32_t goal_pos = static_cast<int32_t>((motor_command * ticks_per_rad) + 2048);
 
-      // --- DIAGNOSTIC PRINT (The Fix) ---
-      // This tells us if ROS is clamping the value before we get it
-      RCLCPP_INFO(rclcpp::get_logger("DynamixelSystem"), 
-          "ID %d | Request: %.2f rad | Sending: %d ticks", 
-          dxl_ids_[i], hw_commands_[i], goal_pos);
-      // ----------------------------------
+      RCLCPP_DEBUG(rclcpp::get_logger("DynamixelSystem"),
+          "ID %d | Request: %.3f joint units | Motor: %.3f rad | Sending: %d ticks",
+          dxl_ids_[i], hw_commands_[i], motor_command, goal_pos);
 
       // Safety Clamp
       // if (goal_pos < 0) goal_pos = 0;

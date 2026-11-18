@@ -26,7 +26,7 @@ def generate_launch_description():
             FindExecutable(name="xacro"),
             " ",
             PathJoinSubstitution(
-                [FindPackageShare("arm_description"), "urdf", "Arm_MoveIt_Assembly.SLDASM.urdf"]
+                [FindPackageShare("arm_description"), "urdf", "AssemblyURDF_27.04.26.urdf"]
             ),
             " use_fake_hardware:=",
             use_fake_hardware,

@@ -1,0 +1,21 @@
+teleop_node:
+  ros__parameters:
+    publish_stamped_twist: true
+    axis_linear:
+      x: 1
+      y: 0
+      z: 4
+    axis_angular:
+      yaw: 3
+      pitch: 0
+      roll: 0
+    scale_linear:
+      x: 0.4
+      y: 0.4
+      z: 0.4
+    scale_angular:
+      yaw: 0.4
+      pitch: 0.0
+      roll: 0.0
+    enable_button: 5
+    require_enable_button: true

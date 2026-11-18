@@ -84,6 +84,7 @@ private:
   std::vector<double> torque_constants_;
   std::vector<double> enc_offs_;
   std::vector<double> trq_limits_;
+  std::vector<int> directions_;
   std::vector<std::pair<std::int16_t, std::int16_t>> limits_;
   std::vector<bool> read_only_;
 

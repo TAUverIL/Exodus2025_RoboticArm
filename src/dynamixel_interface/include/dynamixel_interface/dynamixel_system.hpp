@@ -65,10 +65,16 @@ private:
   // Storage for joint data
   std::vector<double> hw_positions_;
   std::vector<double> hw_velocities_;
+  std::vector<double> hw_efforts_;
   std::vector<double> hw_commands_;
   
   // Mapping from joint index to Dynamixel ID
   std::vector<uint8_t> dxl_ids_;
+
+  // Optional mapping from ros2_control joint position to Dynamixel motor radians:
+  // motor_position = joint_position * scale + offset
+  std::vector<double> position_to_motor_scales_;
+  std::vector<double> position_to_motor_offsets_;
 };
 
 }  // namespace dynamixel_interface

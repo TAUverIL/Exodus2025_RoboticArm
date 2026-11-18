@@ -2,6 +2,22 @@
 
 A ROS2 control system for a 5-DOF robotic arm using CubeMars AK series motors.
 
+## Where to work on what
+
+| Topic | Folder |
+|---|---|
+| Joint motors (CubeMars over CAN), driver safety | `src/cubemars_hardware` |
+| Gripper motor (Dynamixel) | `src/dynamixel_interface` |
+| Arm model (URDF), meshes, motor parameters | `src/arm_description` |
+| Xbox controller, MoveIt, joint limits | `src/arm_moveit_config` |
+| Controllers and main launch files | `src/arm_controller` |
+| Camera and object detection (ZED, YOLO, ArUco) | `src/arm_vision` |
+| Single-motor test files (see its README) | `src/arm_motor_test` |
+
+Start every task on a new branch from `main` and merge back through a Pull Request.
+The last known working state before the 2026 cleanup is tagged `arm-working-2026-05-26`.
+`src/AssemURDF_20-05-26.zip` is a newer SolidWorks export (20.5.2026) that is not wired into the code yet.
+
 ## Packages
 
 ### `cubemars_hardware`
@@ -23,6 +39,12 @@ MoveIt2 configuration for motion planning and control.
 - MoveIt controllers configuration
 - Joint limits
 - Ready to be filled with actual planning configurations
+
+### `dynamixel_interface`
+Hardware interface plugin for the Dynamixel motor that drives the gripper.
+
+### `arm_vision`
+ZED camera node: YOLO person detection with distance, ArUco markers, orange-object detection. See [arm_vision/README.md](src/arm_vision/README.md).
 
 ### `arm_controller`
 Launch files and configurations for bringing up the complete system.

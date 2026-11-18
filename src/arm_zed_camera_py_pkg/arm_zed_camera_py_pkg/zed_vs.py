@@ -10,6 +10,8 @@ from ultralytics import YOLO
 from arm_zed_camera_py_pkg.orange_detector import detect_orange_objects
 from arm_zed_camera_py_pkg.ArucoDetector import aruco_detection
 from rclpy.logging import get_logger
+from ament_index_python.packages import get_package_share_directory
+import os
 
 
 
@@ -17,7 +19,19 @@ class ZEDCameraNode(Node):
     def __init__(self):
         super().__init__('zed_camera_node')
 
-        self.model = YOLO("yolov8n.pt")
+        # Load the YOLO model from a fixed, installed location instead of the
+        # current working directory, so it works no matter where the node is
+        # launched from (and never triggers an internet download).
+        default_model = os.path.join(
+            get_package_share_directory('arm_zed_camera_py_pkg'),
+            'models', 'yolov8n.pt')
+        self.declare_parameter('model_path', default_model)
+        model_path = self.get_parameter('model_path').value
+        if not os.path.isfile(model_path):
+            self.get_logger().error(f"YOLO model not found: {model_path}")
+            raise FileNotFoundError(model_path)
+        self.get_logger().info(f"Loading YOLO model: {model_path}")
+        self.model = YOLO(model_path)
 
         self.zed = sl.Camera()
         init_params = sl.InitParameters()

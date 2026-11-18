@@ -6,7 +6,7 @@ from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
     robot_description_file = PathJoinSubstitution(
-        [FindPackageShare("arm_bringup"), "config", "cubemars_test.ros2_control.xacro"]
+        [FindPackageShare("arm_motor_test"), "config", "cubemars_test.ros2_control.xacro"]
     )
 
     robot_description = Command([
@@ -16,7 +16,7 @@ def generate_launch_description():
     ])
 
     controller_config = PathJoinSubstitution(
-        [FindPackageShare("arm_bringup"), "config", "controllers.yaml"]
+        [FindPackageShare("arm_motor_test"), "config", "controllers.yaml"]
     )
 
     robot_state_publisher = Node(

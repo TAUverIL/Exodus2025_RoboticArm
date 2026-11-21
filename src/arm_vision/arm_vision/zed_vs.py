@@ -7,8 +7,8 @@ from std_msgs.msg import String
 from geometry_msgs.msg import Point
 from cv_bridge import CvBridge
 from ultralytics import YOLO
-from arm_zed_camera_py_pkg.orange_detector import detect_orange_objects
-from arm_zed_camera_py_pkg.ArucoDetector import aruco_detection
+from arm_vision.orange_detector import detect_orange_objects
+from arm_vision.ArucoDetector import aruco_detection
 from rclpy.logging import get_logger
 from ament_index_python.packages import get_package_share_directory
 import os
@@ -23,7 +23,7 @@ class ZEDCameraNode(Node):
         # current working directory, so it works no matter where the node is
         # launched from (and never triggers an internet download).
         default_model = os.path.join(
-            get_package_share_directory('arm_zed_camera_py_pkg'),
+            get_package_share_directory('arm_vision'),
             'models', 'yolov8n.pt')
         self.declare_parameter('model_path', default_model)
         model_path = self.get_parameter('model_path').value

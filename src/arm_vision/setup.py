@@ -3,7 +3,7 @@ from glob import glob
 
 from setuptools import find_packages, setup
 
-package_name = 'arm_zed_camera_py_pkg'
+package_name = 'arm_vision'
 
 setup(
     name=package_name,
@@ -31,7 +31,7 @@ setup(
     # Remove py_modules here
     entry_points={
         'console_scripts': [
-            'zed_camera_node = arm_zed_camera_py_pkg.zed_vs:main',
+            'zed_camera_node = arm_vision.zed_vs:main',
         ],
     },
 )

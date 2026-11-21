@@ -64,7 +64,7 @@ fi
 unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
-##colcon build --packages-select arm_zed_camera_py_pkg --cmake-clean-cache --symlink-install --event-handlers console_direct+
+##colcon build --packages-select arm_vision --cmake-clean-cache --symlink-install --event-handlers console_direct+
 case "$TERM" in
 xterm*|rxvt*)
     PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
@@ -166,7 +166,7 @@ alias serve='python3 -m http.server'  # quick local web server
 alias srcros='source /opt/ros/humble/setup.bash && echo "ROS2 sourced ✅"'
 alias srcws='source ~/ros2_ws/install/setup.bash && echo "Workspace sourced ✅"'
 alias buildws='colcon build --symlink-install && source install/setup.bash'
-alias runzed='ros2 run arm_zed_camera_py_pkg zed_camera_node'
+alias runzed='ros2 run arm_vision zed_camera_node'
 
 ###########################################################
 # ✍️ EDITING / CONFIGURATION
@@ -182,8 +182,8 @@ alias sal='source ~/.bashrc'
 ###########################################################
 # 🏗️ OPTIONAL BUILD SHORTCUTS (commented out)
 ###########################################################
-# alias build='colcon build --packages-select arm_zed_camera_py_pkg --symlink-install && source install/setup.bash'
-# alias full_build='colcon build --packages-select arm_zed_camera_py_pkg --cmake-clean-cache --symlink-install --event-handlers console_direct+'
+# alias build='colcon build --packages-select arm_vision --symlink-install && source install/setup.bash'
+# alias full_build='colcon build --packages-select arm_vision --cmake-clean-cache --symlink-install --event-handlers console_direct+'
 
 
 
@@ -204,7 +204,7 @@ fi
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
-##colcon build --packages-select arm_zed_camera_py_pkg --cmake-clean-cache --symlink-install --event-handlers console_direct+
+##colcon build --packages-select arm_vision --cmake-clean-cache --symlink-install --event-handlers console_direct+
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
     . /usr/share/bash-completion/bash_completion
